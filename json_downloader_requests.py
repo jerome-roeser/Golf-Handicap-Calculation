@@ -2,7 +2,9 @@
 """
 Created on Sun Mar  5 18:23:46 2023
 
-@author: Jerome Roeser
+credit for untitled: tinman6/golfshot-downloader
+
+@author: tinman6
 """
 
 #!/usr/bin/python
