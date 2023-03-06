@@ -7,22 +7,33 @@ Created on Sun Mar  5 15:34:34 2023
 
 
 # import time
+import argparse
 import pandas as pd
-
-from selenium.webdriver import Chrome
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-login = "jerome.roeser@gmail.com"
-password = "XXX"
+USER_NAME = 'jerome.roeser@gmail.com'
+
+parser = argparse.ArgumentParser(description='Download GolfShot data')
+parser.add_argument('username', type=str, nargs='?', help='Username for GolfShot account')
+parser.add_argument('password', type=str, help='Password for GolfShot account')
+args = parser.parse_args()
+
+login = args.username if args.username else USER_NAME
+password = args.password
 
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
 # webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
-webdriver = r"W:/Documents/finxter/projects/chromedriver.exe" #change me!
+# webdriver = r"W:/Documents/finxter/projects/chromedriver.exe" #change me!
+WebDriver = 'C:/temp/git_repos/chromedriver.exe'
 #^Download from: https://chromedriver.chromium.org/
 
-
-driver = Chrome(executable_path=webdriver)
+service = Service(WebDriver)
+driver = webdriver.Chrome(service=service)
+# driver = Chrome(executable_path=webdriver)
 
 
 driver.get("https://play.golfshot.com/signin")
