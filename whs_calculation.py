@@ -208,26 +208,28 @@ def index_calc(entries):
     """
     calculates the index from a liste of differential scores
     """
-    if len(entries) <= 3:    
-        return sorted(entries)[0] - 2.0
-    elif len(entries) == 4:
-        return sorted(entries)[0] - 1.0
-    elif len(entries) == 5:
-        return sorted(entries)[0]
-    elif len(entries) == 6:
-        return np.mean(sorted(entries)[:2]) - 1.0
-    elif len(entries) <=8:
-        return np.mean(sorted(entries)[:2])
-    elif len(entries) <= 11:
-        return np.mean(sorted(entries)[:3])
-    elif len(entries) <= 14:
-        return np.mean(sorted(entries)[:4])
-    elif len(entries) <= 16:
-        return np.mean(sorted(entries)[:5])
-    elif len(entries) <= 18:
-        return np.mean(sorted(entries)[:6])
-    elif len(entries) == 19:
-        return np.mean(sorted(entries)[:7])
+    length = len(entries)
+    sorted_entries = sorted(entries)
+    if length <= 3:    
+        return sorted_entries[0] - 2.0
+    elif length == 4:
+        return sorted_entries[0] - 1.0
+    elif length == 5:
+        return sorted_entries[0]
+    elif length == 6:
+        return np.mean(sorted_entries[:2]) - 1.0
+    elif length <=8:
+        return np.mean(sorted_entries[:2])
+    elif length <= 11:
+        return np.mean(sorted_entries[:3])
+    elif length <= 14:
+        return np.mean(sorted_entries[:4])
+    elif length <= 16:
+        return np.mean(sorted_entries[:5])
+    elif length <= 18:
+        return np.mean(sorted_entries[:6])
+    elif length == 19:
+        return np.mean(sorted_entries[:7])
     else:
         return np.mean(sorted(entries[-20:])[:8])
 
