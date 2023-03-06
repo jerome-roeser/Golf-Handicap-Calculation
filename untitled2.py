@@ -14,6 +14,7 @@ from lxml import etree
 import json
 import re
 import requests
+import pandas as pd 
 
 GOLFSHOT_URL = 'https://play.golfshot.com'
 
@@ -52,13 +53,14 @@ def download_course(session, course_id):
            'scorecard': scorecard}
     json.dump(ret, f)
 
-
+dfs = []
 def download_round(session, profile_id, round_id):
   ROUND_URL = f'{GOLFSHOT_URL}/profiles/{profile_id}/rounds/{round_id}'
 
   res = session.get(ROUND_URL)
   p = RoundParser()
   p.feed(res.text)
+  dfs. append(pd.read_html(res.content, index_col=0))
   with open('data/rounds/%s.json' % p.results['roundGroupId'], 'w') as f:
     json.dump(p.results, f)
 
