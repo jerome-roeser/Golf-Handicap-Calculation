@@ -13,12 +13,12 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 
 login = "jerome.roeser@gmail.com"
-password = "123AZE"
+password = "XXX"
 
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
-webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
-# webdriver = r"W:/Documents/finxter/projects/chromedriver.exe" #change me!
+# webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
+webdriver = r"W:/Documents/finxter/projects/chromedriver.exe" #change me!
 #^Download from: https://chromedriver.chromium.org/
 
 
