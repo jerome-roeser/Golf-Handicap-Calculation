@@ -2,7 +2,6 @@
 """
 Created on Sun Mar  5 15:34:34 2023
 
-credit for untitled: tinman6/golfshot-downloader
 @author: Jerome Roeser
 """
 
