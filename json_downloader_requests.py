@@ -19,6 +19,9 @@ import requests
 import pandas as pd 
 
 GOLFSHOT_URL = 'https://play.golfshot.com'
+USER_NAME = 'jerome.roeser@gmail.com'
+USER_ID = 'xG6ggB'
+USER_UNTIL = '420or2'
 
 
 class RoundParser(HTMLParser):
@@ -95,12 +98,16 @@ def download_rounds(session, profile_id, last_round=None):
 
 
 parser = argparse.ArgumentParser(description='Download GolfShot data')
-parser.add_argument('username', help='Username for GolfShot account')
+parser.add_argument('username', nargs='?', help='Username for GolfShot account')
 parser.add_argument('password', help='Password for GolfShot account')
-parser.add_argument('profile_id', help='Profile ID for GolfShot account')
+parser.add_argument('profile_id', nargs='?', help='Profile ID for GolfShot account')
 parser.add_argument(
     '--until', help='Download rounds until specified round (by descending date)')
 args = parser.parse_args()
+
+login = args.username if args.username else USER_NAME
+golfshot_id = args.profile_id if args.profile_id else USER_ID
+until = args.until if args.until else USER_UNTIL
 
 with requests.Session() as session:
   tokenRequest = session.get(f'{GOLFSHOT_URL}/signin')
@@ -109,9 +116,9 @@ with requests.Session() as session:
   verificationToken = tree.xpath(
       '//form//input[@name="__RequestVerificationToken"]/@value')[0]
   signin = session.post(f'{GOLFSHOT_URL}/signin',
-                        data={'Email': args.username,
+                        data={'Email': login,
                               'Password': args.password,
                               '__RequestVerificationToken': verificationToken,
                               })
 
-  download_rounds(session, args.profile_id, args.until)
+  download_rounds(session, golfshot_id, until)
