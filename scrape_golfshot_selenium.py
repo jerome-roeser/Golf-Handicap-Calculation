@@ -10,9 +10,7 @@ credit for untitled: tinman6/golfshot-downloader
 # import time
 import argparse
 import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 
 USER_NAME = 'jerome.roeser@gmail.com'
@@ -27,14 +25,14 @@ password = args.password
 
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
-# webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
+webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
 # webdriver = r"W:/Documents/finxter/projects/chromedriver.exe" #change me!
-WebDriver = 'C:/temp/git_repos/chromedriver.exe'
+# WebDriver = 'C:/temp/git_repos/chromedriver.exe'
 #^Download from: https://chromedriver.chromium.org/
 
-service = Service(WebDriver)
-driver = webdriver.Chrome(service=service)
-# driver = Chrome(executable_path=webdriver)
+# service = Service(WebDriver)
+# driver = webdriver.Chrome(service=service)
+driver = Chrome(executable_path=webdriver)
 
 
 driver.get("https://play.golfshot.com/signin")
@@ -59,7 +57,7 @@ for i, suffix in enumerate(suffixes[2:7]):
     info = [i.text for i in lines if i.text]
     
     dfs = pd.read_html(driver.page_source, index_col=0)
-    dfs[0].to_excel(f'scorecard_imports/scorecard_{i}.xlsx')
+    dfs[0].to_excel(f'data/scorecards/scorecard_{i}.xlsx')
     # if not tournament:()
     #     df[0].to_excel(
     #         f'{player_name}_{date}_{score}_{golf_course}_{tees}_{slope}_{sss}_casual.xlsx')
