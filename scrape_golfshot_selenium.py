@@ -7,10 +7,12 @@ Created on Sun Mar  5 15:34:34 2023
 
 
 # import time
-import argparse
-import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
+
+import argparse
+import pandas as pd
+
 
 USER_NAME = 'jerome.roeser@gmail.com'
 
@@ -53,14 +55,22 @@ for i, suffix in enumerate(suffixes[2:7]):
     url_round_id = base_url + suffix
     driver.get(url_round_id)
     
-    lines = driver.find_elements('tag name', 'li')
-    info = [i.text for i in lines if i.text]
+    # lines = driver.find_elements('tag name', 'li')
+    # info = [i.text for i in lines if i.text]
+    profile = driver.find_elements('class name', 'profile')[0].text.split('\n')
+    player_name = profile[1]
+    player_handicap = float(profile[0])
+    golf_course = profile[9]
+    golf_course_tees = profile[10]
+    round_date = profile[11]
+    
+    
     
     dfs = pd.read_html(driver.page_source, index_col=0)
-    dfs[0].to_excel(f'data/scorecards/scorecard_{i}.xlsx')
+    dfs[0].to_excel(f'data/scorecards/{player_name}_hcp-{player_handicap}_{golf_course}_{round_date}.xlsx')
     # if not tournament:()
     #     df[0].to_excel(
-    #         f'{player_name}_{date}_{score}_{golf_course}_{tees}_{slope}_{sss}_casual.xlsx')
+    #         f'{player_name}_hcp-{date}_{score}_{golf_course}_{tees}_{slope}_{sss}_casual.xlsx')
     # else:
     #     df[0].to_excel(
     #         f'{player_name}_{date}_{score}_{golf_course}_{tees}_{slope}_{sss}_tournament.xlsx')
