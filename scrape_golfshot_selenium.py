@@ -60,14 +60,14 @@ for i, suffix in enumerate(suffixes[2:7]):
     profile = driver.find_elements('class name', 'profile')[0].text.split('\n')
     player_name = profile[1]
     player_handicap = float(profile[0])
-    golf_course = profile[9]
-    golf_course_tees = profile[10]
+    golf_course = profile[9].split()
+    golf_course_tees = profile[10].split()
     round_date = profile[11]
     
     
-    
     dfs = pd.read_html(driver.page_source, index_col=0)
-    dfs[0].to_excel(f'data/scorecards/{player_name}_hcp-{player_handicap}_{golf_course}_{round_date}.xlsx')
+    dfs[0].to_excel(
+        f'data/scorecards/{player_name}_hcp-{player_handicap}_{golf_course[1]}_{round_date[0]}.xlsx')
     # if not tournament:()
     #     df[0].to_excel(
     #         f'{player_name}_hcp-{date}_{score}_{golf_course}_{tees}_{slope}_{sss}_casual.xlsx')
