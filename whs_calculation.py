@@ -74,7 +74,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
     Input a player name
     returns a list (dict?) of scorecard dataframes (max 20)
     """
-    path = Path('.')
+    path = Path('./data/scorecards')
     scorecard_list = []
     for p in path.iterdir():
         if p.is_file() and p.match(f'{player}*'):
