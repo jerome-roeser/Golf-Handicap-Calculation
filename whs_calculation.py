@@ -79,7 +79,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
     for p in path.iterdir():
         if p.is_file() and p.match(f'{player}*'):
             scorecard_list.append(p.name)
-    return scorecard_list[:last_round]
+    return scorecard_list
     
 def get_current_index(player, file=FFG_STYLE_FILE):
     """
@@ -98,7 +98,8 @@ def get_scorecard_dataframe(scorecard):
     takes an excel file as an argument
     returns a dataframe
     """
-    return pd.read_excel(scorecard, index_col=0)
+    path_to_scorecard = f'data/scorecards/{scorecard}'
+    return pd.read_excel(path_to_scorecard, index_col=0)
 
 def get_course_handicap(hcp_player, slope):
     """
@@ -111,25 +112,24 @@ def score_differentiel(sba, slope, sss):
     return round((113/slope) * (sba-sss), 1)
 
 
-def process_scorecard_for_index_calculation(scorecard, hcp_player):
+def process_scorecard_for_index_calculation(scorecard):
     """
    
     """
+    
     df = get_scorecard_dataframe(scorecard)
+    df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
+    df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
     l = [x for x in scorecard.split('_')]
     
     
-    # get course handicap
-    player = l[0]
-    hcp_player = get_current_index(player)
-    slope, sss = float(l[-3]), float(l[-2])
+    slope, sss = float(l[3].split()[-1]), float(l[3].split()[-2])
     coup_supp = 0
-    if df.loc['Score'].isna().any():
+    if df.iloc[4].isna().any():
         coup_supp += 1
-        slope = slope * 2
-        sss = sss * 2
-    hcp_course = get_course_handicap(scorecard, hcp_player, slope)
-    
+        # slope = slope * 2
+        # sss = sss * 2
+    hcp_course = float(l[4][-9:-6])
        
     # sort out columns and calculate CR and SBA from course handicap
     df = df.iloc[1:4].drop(columns=['Out','In','Total'])
@@ -139,8 +139,8 @@ def process_scorecard_for_index_calculation(scorecard, hcp_player):
                     for i in range(0,18)]
     df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
     df.loc['ndb'] = df.loc['Par'] + df.loc['CR'] + 2
-    df.loc["SBA"] = [df.loc['Score'][i] 
-                    if df.loc['Score'][i] < df.loc['ndb'][i] 
+    df.loc["SBA"] = [df.iloc[2][i] 
+                    if df.iloc[2][i] < df.loc['ndb'][i] 
                     else df.loc['ndb'][i]
                     for i in range(0,18)]
     return df
@@ -257,7 +257,7 @@ def main(file):
     Export the historique d'index file
     """
     #parse scorecards in shotzoom and save as excel, create scorecard list
-    parse_scorecard_from_shotzoom() # if necessary last 5 or last 20 rounds
+    scrape_golfshot_selenium() # if necessary last 5 or last 20 rounds
     get_scorecard_list_from_folder() # if necessary last 5 or last 20 rounds
     fill_index_table()
     calculate_index()
