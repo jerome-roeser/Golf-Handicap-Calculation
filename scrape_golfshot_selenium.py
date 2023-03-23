@@ -51,8 +51,7 @@ def scrape_golfshot(login, password, number_of_rounds):
         print(f"[+++] {golf_course} on {round_date[0]}...")
         dfs = pd.read_html(driver.page_source, index_col=0)
         dfs[0].iloc[:6] = dfs[0].iloc[:6].apply(pd.to_numeric, errors='coerce')
-        dfs[0].iloc[-3:] = dfs[0].iloc[-3:].apply(
-            pd.to_numeric, errors='coerce')
+        dfs[0].iloc[-3:] = dfs[0].iloc[-3:].apply(pd.to_numeric, errors='coerce')
         dfs[0].to_excel(
             f'data/scorecards/{player_name}_{round_date[0]}_{golf_course}_{golf_course_tees[0]}_{course_handicap}.xlsx')
     driver.quit()
