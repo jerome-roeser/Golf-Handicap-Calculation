@@ -182,21 +182,23 @@ def get_scorecard_metadata(scorecard):
 
 def fill_index_table(scorecard):
     l = [x for x in scorecard.split('_')]
+    df = get_scorecard_dataframe(scorecard)
+    processed_df = process_scorecard_for_index_calculation(scorecard)
     return dict({'N°': '', # set as index? 
-                 'Nom': '', #??
+                 'Nom': l[0], #?? Profile
                  'T': 1, # 1 or 10
-                 'Date': l[1], 
+                 'Date': l[1], #profile
                  'NbT': 18, # 9A, 9R or 18
-                 'Fml': '', # Strokeplay or Stableford
-                 'Golf': l[3], #
-                 'Terrain': l[4], #tees?
+                 'Fml': '', # Strokeplay or Stableford Profile
+                 'Golf': l[2], # Profile
+                 'Terrain': l[3].split()[0], #tees? Profile
                  'Rep.': '', # ??         
-                 'Par': '', 
-                 'SSS': float(l[6]),
-                 'Slope': int(l[5]),
+                 'Par': int(df.Total.loc['Par']), 
+                 'SSS': float(l[3].split()[-2]),
+                 'Slope': int(l[3].split()[-1]),
                  'Stat.': '', 
-                 'Score': int(l[2]),
-                 'SBA': '',
+                 'Score': int(df.Total.iloc[3]),
+                 'SBA': int(sum(processed_df.loc['SBA'])),
                  'PCC': '', # ?
                  'Diff': '',
                  'Ajst': '', #?

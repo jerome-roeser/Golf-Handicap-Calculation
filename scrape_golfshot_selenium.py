@@ -19,8 +19,8 @@ USER_NAME = 'jerome.roeser@gmail.com'
 NUMBER_OF_ROUNDS = 5
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
-# webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
-webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
+webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
+# webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
 #^Download from: https://chromedriver.chromium.org/
 
 
