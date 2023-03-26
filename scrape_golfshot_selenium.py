@@ -58,10 +58,8 @@ def scrape_golfshot(login, password, number=1):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Download GolfShot data')
-    parser.add_argument('rounds', type=int, nargs='?',
-                        help='number of scorecards to import (Default = 1 i.e. the last round')
-    parser.add_argument('username', type=str, nargs='?',
-                        help='Username for GolfShot account')
+    parser.add_argument('-r', '--rounds', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
+    parser.add_argument('-u', '--username', type=str, help='Username for GolfShot account')
     return parser.parse_args()
     
 
