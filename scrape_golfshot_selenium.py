@@ -24,7 +24,7 @@ webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
 #^Download from: https://chromedriver.chromium.org/
 
 
-def scrape_golfshot(login, password, number_of_rounds):
+def scrape_golfshot(login, password, number=1):
     driver = Chrome(executable_path=webdriver)
     driver.get("https://play.golfshot.com/signin")
 
@@ -38,7 +38,7 @@ def scrape_golfshot(login, password, number_of_rounds):
     base_url = 'https://play.golfshot.com'
     round_ids = driver.find_elements('tag name', 'tr')
     suffixes = [i.get_attribute('data-href') for i in round_ids[2:]]
-    for i, suffix in enumerate(suffixes[:number_of_rounds]):
+    for i, suffix in enumerate(suffixes[:number]):
         url_round_id = base_url + suffix
         driver.get(url_round_id)
         profile = driver.find_elements('class name', 'profile')[
@@ -56,17 +56,21 @@ def scrape_golfshot(login, password, number_of_rounds):
             f'data/scorecards/{player_name}_{round_date[0]}_{golf_course}_{golf_course_tees[0]}_{course_handicap}.xlsx')
     driver.quit()
 
-
-if __name__ == '__main__':
+def get_args():
     parser = argparse.ArgumentParser(description='Download GolfShot data')
+    parser.add_argument('rounds', type=int, nargs='?',
+                        help='number of scorecards to import (Default = 1 i.e. the last round')
     parser.add_argument('username', type=str, nargs='?',
                         help='Username for GolfShot account')
-    parser.add_argument('rounds', type=str, nargs='?',
-                        help='number of scorecards to import (Default = 1 i.e. the last round')
+    return parser.parse_args()
+    
 
-    args = parser.parse_args()
-    login = args.username if args.username else USER_NAME
-    password = getpass('Enter your password: ')
+if __name__ == '__main__':
+    args = get_args()
     number_of_rounds = args.rounds if args.rounds else NUMBER_OF_ROUNDS
+    login = args.username if args.username else USER_NAME
+    password = '123AZE' #getpass('Enter your password: ')
+    
+    print(f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
 
     scrape_golfshot(login, password, number_of_rounds)

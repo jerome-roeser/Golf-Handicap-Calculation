@@ -16,6 +16,7 @@ import requests
 import argparse, sys
 from bs4 import BeautifulSoup
 from pathlib import Path
+from scrape_golfshot_selenium import scrape_golfshot
 import pandas as pd
 import numpy as np
 
@@ -259,10 +260,10 @@ def main(file):
     Export the historique d'index file
     """
     #parse scorecards in shotzoom and save as excel, create scorecard list
-    scrape_golfshot_selenium() # if necessary last 5 or last 20 rounds
-    get_scorecard_list_from_folder() # if necessary last 5 or last 20 rounds
+    scrape_golfshot() # if necessary last 5 or last 20 rounds
+    scorecard_list = get_scorecard_list_from_folder() # if necessary last 5 or last 20 rounds
     fill_index_table()
-    calculate_index()
+    index_calc()
     export_tableau_index()
     # create tableau index with last x rounds 
     
