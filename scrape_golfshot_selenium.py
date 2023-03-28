@@ -16,11 +16,11 @@ import pandas as pd
 
 
 USER_NAME = 'jerome.roeser@gmail.com'
-NUMBER_OF_ROUNDS = 5
+NUMBER_OF_ROUNDS = 1
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
-webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
-# webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
+# webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
+webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
 #^Download from: https://chromedriver.chromium.org/
 
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     args = get_args()
     number_of_rounds = args.rounds if args.rounds else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
-    password = '123AZE' #getpass('Enter your password: ')
+    password = getpass('Enter your password: ')
     
     print(f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
 

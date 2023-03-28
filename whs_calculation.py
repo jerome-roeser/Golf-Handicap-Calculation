@@ -15,6 +15,7 @@ PAR
 import requests
 import argparse, sys
 from bs4 import BeautifulSoup
+from getpass import getpass
 from pathlib import Path
 from scrape_golfshot_selenium import scrape_golfshot
 import pandas as pd
@@ -248,7 +249,7 @@ def get_args():
     return args
     
 
-def main(file):
+def main():
     """
     We assume the correct index is updated and used for each round of golf.
     For a scorecard the correct player index is used and thus the correct 
@@ -260,42 +261,42 @@ def main(file):
     Export the historique d'index file
     """
     #parse scorecards in shotzoom and save as excel, create scorecard list
-    scrape_golfshot() # if necessary last 5 or last 20 rounds
-    scorecard_list = get_scorecard_list_from_folder() # if necessary last 5 or last 20 rounds
+    scrape_golfshot(player, password) # if necessary last 5 or last 20 rounds
+    scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
     fill_index_table()
     index_calc()
-    export_tableau_index()
+    # export_tableau_index()
     # create tableau index with last x rounds 
     
     
-    # calculate index for each row
-    for i in range(len(df_scores)):
-        df_scores.iloc[i, 3] = index_calc(df_scores.iloc[0:i+1, 2])
+    # # calculate index for each row
+    # for i in range(len(df_scores)):
+    #     df_scores.iloc[i, 3] = index_calc(df_scores.iloc[0:i+1, 2])
     
-    current_index = ''
+    # current_index = ''
        
-    # export file
-    df.to_excel('')
+    # # export file
+    # df.to_excel('')
     
-    scorecards = []
-    for p in path.iterdir():
-        if p.is_file() and p.match('Jerome*'):
-            scorecards.append(p.name)
-    print('On dénombre', len(scorecards), 'carte(s) de scores')
-    # # print(f'{player} a initialement un handicap de {hcp_player}...\n')
-    # # print(f'{player} a {hcp_course} coups rendus\n')
-    #scorecard_list = []
-    for scorecard in scorecards[-20:]:
-        scorecard_list.append(sba_calc(scorecard))
+    # scorecards = []
+    # for p in path.iterdir():
+    #     if p.is_file() and p.match('Jerome*'):
+    #         scorecards.append(p.name)
+    # print('On dénombre', len(scorecards), 'carte(s) de scores')
+    # # # print(f'{player} a initialement un handicap de {hcp_player}...\n')
+    # # # print(f'{player} a {hcp_course} coups rendus\n')
+    # #scorecard_list = []
+    # for scorecard in scorecards[-20:]:
+    #     scorecard_list.append(sba_calc(scorecard))
     
-    df_scores = pd.DataFrame(scorecard_list).sort_values('date')
+    # df_scores = pd.DataFrame(scorecard_list).sort_values('date')
    
     
     
-    df_scores.to_excel('tableau_index.xlsx')
+    # df_scores.to_excel('tableau_index.xlsx')
     
-    # print(f'{player} a désormais un handicap de', df_scores.iloc[-1,-1])    
-    print('Ci-joint le tableau d\'index:\n\n', df_scores)
+    # # print(f'{player} a désormais un handicap de', df_scores.iloc[-1,-1])    
+    # print('Ci-joint le tableau d\'index:\n\n', df_scores)
     
     
 #%% script
@@ -307,8 +308,9 @@ if __name__ == '__main__':
         of writing this silly text"""
     )
     args = parser.parse_args()
-    
-    main()
+    password = getpass('Enter your password: ')
+    fill_index_table()
+    # main()
     
     # print('On dénombre', len(scorecards), 'carte(s) de scores')
     # # print(f'{player} a initialement un handicap de {hcp_player}...\n')
