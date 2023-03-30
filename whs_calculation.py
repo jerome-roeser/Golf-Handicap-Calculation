@@ -90,11 +90,22 @@ def is_full_round(scorecard):
         return True
 
 def starting_tee(scorecard):
-    df = get_scorecard_dataframe(scorecard)
-    if is_full_round(scorecard) and df.iloc[3,0].isna():
+    df = get_scorecard_dataframe(scorecard).fillna(0)
+    if not is_full_round(scorecard) and df.iloc[3,0] == 0:
         return 10
     else:
         return 1
+    
+def Nbt_entry(scorecard):
+    if is_full_round(scorecard):
+        return 18
+    elif not is_full_round(scorecard) and starting_tee(scorecard) == 1:
+        return '9A'
+    else:
+        return '9R'
+    
+def score_differentiel(sba, slope, sss):
+    return round((113/slope) * (sba-sss), 1)   
 
 def fill_index_table(scorecard):
     """returns a dictionary from a scorecard which can be used as
@@ -102,9 +113,12 @@ def fill_index_table(scorecard):
     l = [x for x in scorecard.split('_')]
     df = get_scorecard_dataframe(scorecard)
     processed_df = process_scorecard_for_index_calculation(scorecard)
+    sss = float(l[3].split()[-2])
+    slope = int(l[3].split()[-1])
+    sba = int(sum(processed_df.loc['SBA']))
     return dict({'N°': '', # set as index? 
                  'Nom': l[0], #?? Profile
-                 'T': 1, # 1 or 10
+                 'T': starting_tee(scorecard), # 1 or 10
                  'Date': l[1], #profile
                  'NbT': 18, # 9A, 9R or 18
                  'Fml': '', # Strokeplay or Stableford Profile
@@ -112,13 +126,13 @@ def fill_index_table(scorecard):
                  'Terrain': l[3].split()[0], #tees? Profile
                  'Rep.': '', # ??         
                  'Par': int(df.Total.loc['Par']), 
-                 'SSS': float(l[3].split()[-2]),
-                 'Slope': int(l[3].split()[-1]),
+                 'SSS': sss,
+                 'Slope': slope,
                  'Stat.': '', 
                  'Score': int(df.Total.iloc[3]),
-                 'SBA': int(sum(processed_df.loc['SBA'])),
+                 'SBA': sba,
                  'PCC': '', # ?
-                 'Diff': '',
+                 'Diff': score_differentiel(sba, slope, sss),
                  'Ajst': '', #?
                  'Idx': ''
                  })

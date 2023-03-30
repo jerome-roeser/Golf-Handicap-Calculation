@@ -52,9 +52,6 @@ def get_course_handicap(hcp_player, slope):
     returns course handicap (int)
     """
     return round(hcp_player*slope/113)
-    
-def score_differentiel(sba, slope, sss):
-    return round((113/slope) * (sba-sss), 1)
 
 def get_round_info(scorecard, hcp_player):
     df = process_scorecard_for_index_calculation(scorecard, hcp_player)  
