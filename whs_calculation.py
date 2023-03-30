@@ -263,8 +263,9 @@ def main():
     #parse scorecards in shotzoom and save as excel, create scorecard list
     scrape_golfshot(player, password) # if necessary last 5 or last 20 rounds
     scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
-    fill_index_table()
-    index_calc()
+    entries = [fill_index_table(i) for i in scorecard_list]
+    return print(entries)
+    # index_calc()
     # export_tableau_index()
     # create tableau index with last x rounds 
     
@@ -309,8 +310,8 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     password = getpass('Enter your password: ')
-    fill_index_table()
-    # main()
+    # fill_index_table()
+    main()
     
     # print('On dénombre', len(scorecards), 'carte(s) de scores')
     # # print(f'{player} a initialement un handicap de {hcp_player}...\n')
