@@ -11,7 +11,7 @@ départ
 PAR
 
 """
-
+#%%
 import requests
 import argparse, sys
 from bs4 import BeautifulSoup
@@ -76,7 +76,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
     Input a player name
     returns a list (dict?) of scorecard dataframes (max 20)
     """
-    path = Path('./data/scorecards')
+    path = Path('./data/scorecards/')
     scorecard_list = []
     for p in path.iterdir():
         if p.is_file() and p.match(f'{player}*'):
@@ -245,8 +245,9 @@ def get_args():
         epilog="""should probably cite examples here instead 
         of writing this silly text"""
     )
-    args = parser.parse_args()
-    return args
+    parser.add_argument('-r', '--rounds', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
+    parser.add_argument('-u', '--username', type=str, help='Username for GolfShot account')
+    return parser.parse_args()
     
 
 def main():
@@ -264,7 +265,7 @@ def main():
     scrape_golfshot(player, password) # if necessary last 5 or last 20 rounds
     scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
     entries = [fill_index_table(i) for i in scorecard_list]
-    return print(entries)
+    return entries
     # index_calc()
     # export_tableau_index()
     # create tableau index with last x rounds 
@@ -302,15 +303,9 @@ def main():
     
 #%% script
 if __name__ == '__main__':
-    # get_args()
-    parser = argparse.ArgumentParser(
-        description='Upadte WHS for a player.',
-        epilog="""should probably cite examples here instead 
-        of writing this silly text"""
-    )
-    args = parser.parse_args()
+    args = get_args()
     password = getpass('Enter your password: ')
-    # fill_index_table()
+
     main()
     
     # print('On dénombre', len(scorecards), 'carte(s) de scores')
