@@ -82,6 +82,17 @@ def process_scorecard_for_index_calculation(scorecard):
                     for i in range(0,18)]
     return df
 
+def is_full_round(scorecard):
+    df = get_scorecard_dataframe(scorecard)
+    if df.iloc[4].isna().any():
+        return False
+
+def starting_tee(scorecard):
+    if not is_full_round(scorecard) and df.iloc[4].isna():
+        return 10
+    else:
+        return 1
+
 def fill_index_table(scorecard):
     """returns a dictionary from a scorecard which can be used as
       a row for the final excel file"""
@@ -174,4 +185,3 @@ if __name__ == '__main__':
     password = getpass('Enter your password: ')
 
     main()
-    
