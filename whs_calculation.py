@@ -11,7 +11,7 @@ départ
 PAR
 
 """
-#%%
+
 import requests
 import argparse, sys
 from bs4 import BeautifulSoup
@@ -21,14 +21,12 @@ from scrape_golfshot_selenium import scrape_golfshot
 import pandas as pd
 import numpy as np
 
-#%% variable definition
 
 SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
 FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
 player = 'Jerome Roeser'
 
 
-#%% imports
 
 def get_scorecard_list_from_folder(player, last_round=5):
     """
@@ -42,8 +40,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
         if p.is_file() and p.match(f'{player}*'):
             scorecard_list.append(p.name)
     return scorecard_list
-   
-#%% functions
+
 
 def get_scorecard_dataframe(scorecard):
     """
@@ -57,7 +54,6 @@ def process_scorecard_for_index_calculation(scorecard):
     """
    
     """
-    
     df = get_scorecard_dataframe(scorecard)
     df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
     df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
@@ -87,6 +83,8 @@ def process_scorecard_for_index_calculation(scorecard):
     return df
 
 def fill_index_table(scorecard):
+    """returns a dictionary from a scorecard which can be used as
+      a row for the final excel file"""
     l = [x for x in scorecard.split('_')]
     df = get_scorecard_dataframe(scorecard)
     processed_df = process_scorecard_for_index_calculation(scorecard)
@@ -142,7 +140,6 @@ def index_calc(entries):
         return np.mean(sorted(entries[-20:])[:8])
 
 
-#%% main
 def get_args():
     parser = argparse.ArgumentParser(
         description='Upadte WHS for a player.',
@@ -171,13 +168,10 @@ def main():
     entries = [fill_index_table(i) for i in scorecard_list]
     return entries
     
-    
-    
-#%% script
+
 if __name__ == '__main__':
     args = get_args()
     password = getpass('Enter your password: ')
 
     main()
-    
     
