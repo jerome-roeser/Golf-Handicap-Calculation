@@ -107,7 +107,7 @@ def Nbt_entry(scorecard):
 def score_differentiel(sba, slope, sss):
     return round((113/slope) * (sba-sss), 1)   
 
-def fill_index_table(scorecard):
+def table_row(scorecard):
     """returns a dictionary from a scorecard which can be used as
       a row for the final excel file"""
     l = [x for x in scorecard.split('_')]
@@ -120,7 +120,7 @@ def fill_index_table(scorecard):
                  'Nom': l[0], #?? Profile
                  'T': starting_tee(scorecard), # 1 or 10
                  'Date': l[1], #profile
-                 'NbT': 18, # 9A, 9R or 18
+                 'NbT': Nbt_entry(scorecard), # 9A, 9R or 18
                  'Fml': '', # Strokeplay or Stableford Profile
                  'Golf': l[2], # Profile
                  'Terrain': l[3].split()[0], #tees? Profile
@@ -137,6 +137,13 @@ def fill_index_table(scorecard):
                  'Idx': ''
                  })
 
+def fill_index_table(new_rows):
+    df = pd.read_excel('data/fiche_historique_index_JR.xlsx')
+    df = df.append(new_rows, ignore_index=True)
+    df = df.drop_duplicates(subset=['Date', 'Score'])
+    
+    df.to_excel('data/fiche_historique_index_JR.xlsx', index=False)
+    
 
 def index_calc(entries):
     """
@@ -193,8 +200,8 @@ def main():
     #parse scorecards in shotzoom and save as excel, create scorecard list
     scrape_golfshot(player, password) # if necessary last 5 or last 20 rounds
     scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
-    entries = [fill_index_table(i) for i in scorecard_list]
-    return entries
+    entries = [table_row(i) for i in scorecard_list]
+    fill_index_table(entries)
     
 
 if __name__ == '__main__':
