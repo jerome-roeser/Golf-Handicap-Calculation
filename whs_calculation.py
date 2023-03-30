@@ -86,9 +86,12 @@ def is_full_round(scorecard):
     df = get_scorecard_dataframe(scorecard)
     if df.iloc[4].isna().any():
         return False
+    else:
+        return True
 
 def starting_tee(scorecard):
-    if not is_full_round(scorecard) and df.iloc[4].isna():
+    df = get_scorecard_dataframe(scorecard)
+    if is_full_round(scorecard) and df.iloc[3,0].isna():
         return 10
     else:
         return 1
