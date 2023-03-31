@@ -155,11 +155,11 @@ def table_row(scorecard):
                  })
 
 def fill_index_table(new_rows):
-    df = pd.read_excel('data/fiche_historique_index_JR.xlsx')
+    df = pd.read_excel('data/_fiche_historique_index.xlsx')
     df = df.append(new_rows, ignore_index=True)
     df = df.drop_duplicates(subset=['Date', 'Score'])
     
-    df.to_excel('data/fiche_historique_index_JR.xlsx', index=False)
+    df.to_excel(f'data/fiche_historique_index_{player}.xlsx', index=False)
     
 
 def index_calc(entries):
