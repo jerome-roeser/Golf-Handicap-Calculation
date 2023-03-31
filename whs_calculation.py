@@ -130,6 +130,7 @@ def table_row(scorecard):
                  'Par': int(df.Total.loc['Par']), 
                  'SSS': sss,
                  'Slope': slope,
+                 'Course Handicap':float(l[4][-9:-6]),
                  'Stat.': '', 
                  'Score': int(df.Total.iloc[3]),
                  'SBA': sba,
