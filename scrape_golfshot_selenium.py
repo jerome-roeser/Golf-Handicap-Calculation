@@ -16,7 +16,7 @@ import pandas as pd
 
 
 USER_NAME = 'jerome.roeser@gmail.com'
-NUMBER_OF_ROUNDS = 1
+NUMBER_OF_ROUNDS = 20
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
 # webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
