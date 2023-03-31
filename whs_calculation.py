@@ -76,7 +76,7 @@ def process_scorecard_for_index_calculation(scorecard):
                     if df.loc['Handicap'][i] <= hcp_course % 18 
                     else hcp_course // 18 
                     for i in range(0,18)]
-    df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
+    # df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
     df.loc['ndb'] = df.loc['Par'] + df.loc['CR'] + 2
     df.loc["SBA"] = [df.iloc[2][i] 
                     if df.iloc[2][i] < df.loc['ndb'][i] 
@@ -105,6 +105,19 @@ def Nbt_entry(scorecard):
         return '9A'
     else:
         return '9R'
+
+def score_brut_ajuste(scorecard):
+    l = [x for x in scorecard.split('_')]
+    processed_df = process_scorecard_for_index_calculation(scorecard)
+    coup_supp = 0
+    sss = float(l[3].split()[-2])
+    slope = int(l[3].split()[-1])
+    if df.iloc[4].isna().any():
+        coup_supp += 1
+        slope = slope * 2
+        sss = sss * 2
+    sba = int(sum(processed_df.loc['SBA'])) + coup_supp
+    return 
     
 def score_differentiel(sba, slope, sss):
     return round((113/slope) * (sba-sss), 1)   
