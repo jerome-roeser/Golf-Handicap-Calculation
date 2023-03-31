@@ -24,6 +24,7 @@ import numpy as np
 
 SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
 FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
+USER_NAME = 'jerome.roeser@gmail.com'
 NUMBER_OF_ROUNDS = 20
 player = 'Jerome Roeser'
 
@@ -199,7 +200,7 @@ def main():
     Export the historique d'index file
     """
     #parse scorecards in shotzoom and save as excel, create scorecard list
-    scrape_golfshot(player, password, number_of_rounds) # if necessary last 5 or last 20 rounds
+    scrape_golfshot(login, password, number_of_rounds) # if necessary last 5 or last 20 rounds
     scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
     entries = [table_row(i) for i in scorecard_list]
     fill_index_table(entries)
@@ -208,6 +209,7 @@ def main():
 if __name__ == '__main__':
     args = get_args()
     number_of_rounds = args.rounds if args.rounds else NUMBER_OF_ROUNDS
+    login = args.username if args.username else USER_NAME
     password = getpass('Enter your password: ')
 
     main()
