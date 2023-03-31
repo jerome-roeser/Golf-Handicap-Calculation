@@ -108,16 +108,17 @@ def Nbt_entry(scorecard):
 
 def score_brut_ajuste(scorecard):
     l = [x for x in scorecard.split('_')]
+    df = get_scorecard_dataframe(scorecard)
     processed_df = process_scorecard_for_index_calculation(scorecard)
     coup_supp = 0
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
-    if df.iloc[4].isna().any():
+    if df.iloc[4].isna().any() or len(df.columns) < 21:
         coup_supp += 1
         slope = slope * 2
         sss = sss * 2
     sba = int(sum(processed_df.loc['SBA'])) + coup_supp
-    return 
+    return sba
     
 def score_differentiel(sba, slope, sss):
     return round((113/slope) * (sba-sss), 1)   
@@ -130,7 +131,7 @@ def table_row(scorecard):
     processed_df = process_scorecard_for_index_calculation(scorecard)
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
-    sba = int(sum(processed_df.loc['SBA']))
+    sba = score_brut_ajuste(scorecard)
     return dict({'N°': '', # set as index? 
                  'Nom': l[0], #?? Profile
                  'T': starting_tee(scorecard), # 1 or 10
