@@ -25,7 +25,7 @@ import numpy as np
 SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
 FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
 USER_NAME = 'jerome.roeser@gmail.com'
-NUMBER_OF_ROUNDS = 20
+NUMBER_OF_ROUNDS = 18
 player = 'Jerome Roeser'
 
 
