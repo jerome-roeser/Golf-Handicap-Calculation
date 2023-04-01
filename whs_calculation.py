@@ -15,6 +15,7 @@ PAR
 import requests
 import argparse, sys
 from bs4 import BeautifulSoup
+from datetime import datetime
 from getpass import getpass
 from pathlib import Path
 from scrape_golfshot_selenium import scrape_golfshot
@@ -76,7 +77,7 @@ def process_scorecard_for_index_calculation(scorecard):
                     if df.loc['Handicap'][i] <= hcp_course % 18 
                     else hcp_course // 18 
                     for i in range(0,18)]
-    # df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
+    df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
     df.loc['ndb'] = df.loc['Par'] + df.loc['CR'] + 2
     df.loc["SBA"] = [df.iloc[2][i] 
                     if df.iloc[2][i] < df.loc['ndb'][i] 
@@ -135,7 +136,8 @@ def table_row(scorecard):
     return dict({'N°': '', # set as index? 
                  'Nom': l[0], #?? Profile
                  'T': starting_tee(scorecard), # 1 or 10
-                 'Date': l[1], #profile
+                #  'Date': datetime.strptime(l[1], '%b %d %Y'), #profile
+                 'Date': l[1],
                  'NbT': Nbt_entry(scorecard), # 9A, 9R or 18
                  'Fml': '', # Strokeplay or Stableford Profile
                  'Golf': l[2], # Profile
@@ -155,9 +157,12 @@ def table_row(scorecard):
                  })
 
 def fill_index_table(new_rows):
-    df = pd.read_excel('data/_fiche_historique_index.xlsx')
+    df = pd.read_excel('templates/_fiche_historique_index.xlsx')
     df = df.append(new_rows, ignore_index=True)
     df = df.drop_duplicates(subset=['Date', 'Score'])
+    df.Date = pd.to_datetime(df.Date)
+    df = df.sort_values(by='Date', ascending=False)
+    df.Date = df.Date.dt.strftime('%d %B %Y')
     
     df.to_excel(f'data/fiche_historique_index_{player}.xlsx', index=False)
     
@@ -198,12 +203,13 @@ def get_args():
         epilog="""should probably cite examples here instead 
         of writing this silly text"""
     )
-    parser.add_argument('-r', '--rounds', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
+    parser.add_argument('-n', '--number', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
     parser.add_argument('-u', '--username', type=str, help='Username for GolfShot account')
+    parser.add_argument('-r', '--refresh', action='store_true', help='Refresh local copy of the disposable domains file.')
     return parser.parse_args()
     
 
-def main():
+def main(refresh = False):
     """
     We assume the correct index is updated and used for each round of golf.
     For a scorecard the correct player index is used and thus the correct 
@@ -215,7 +221,8 @@ def main():
     Export the historique d'index file
     """
     #parse scorecards in shotzoom and save as excel, create scorecard list
-    scrape_golfshot(login, password, number_of_rounds) # if necessary last 5 or last 20 rounds
+    if refresh:
+        scrape_golfshot(login, password, number_of_rounds) # if necessary last 5 or last 20 rounds
     scorecard_list = get_scorecard_list_from_folder(player) # if necessary last 5 or last 20 rounds
     entries = [table_row(i) for i in scorecard_list]
     fill_index_table(entries)
@@ -223,8 +230,10 @@ def main():
 
 if __name__ == '__main__':
     args = get_args()
-    number_of_rounds = args.rounds if args.rounds else NUMBER_OF_ROUNDS
+    number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
-    password = getpass('Enter your password: ')
+    refresh = args.refresh
+    if refresh:
+        password = getpass('Enter your password: ')
 
-    main()
+    main(refresh)
