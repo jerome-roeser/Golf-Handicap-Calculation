@@ -72,7 +72,11 @@ def process_scorecard_for_index_calculation(scorecard):
     hcp_course = float(l[4][-9:-6])
        
     # sort out columns and calculate CR and SBA from course handicap
-    df = df.iloc[1:4].drop(columns=['Out','In','Total'])
+    if len(df.columns) < 21:
+        df = df.iloc[1:4].drop(columns=['Out', 'Total'])
+        # df = df.iloc[1:4].drop(columns=['Out', 'Total'])
+    else:
+        df = df.iloc[1:4].drop(columns=['Out', 'In', 'Total'])
     df.loc['CR'] = [hcp_course // 18 + 1 
                     if df.loc['Handicap'][i] <= hcp_course % 18 
                     else hcp_course // 18 
@@ -190,12 +194,18 @@ def index_calc(entries):
     elif length <= 16:
         return np.mean(sorted_entries[:5])
     elif length <= 18:
-        return np.mean(sorted_entries[:6])
+        return round(np.mean(sorted_entries[:6]), 1)
     elif length == 19:
         return np.mean(sorted_entries[:7])
     else:
-        return np.mean(sorted(entries[-20:])[:8])
+        return round(np.mean(sorted(entries[-20:])[:8]), 1)
 
+def algorithm(df):
+    length = len(df.Diff)
+    for i in range(length):
+        l = [df.Diff.iloc[i] for i in range(i,length)]
+        df.Idx.iloc[i] = index_calc(l)
+    return df.Idx
 
 def get_args():
     parser = argparse.ArgumentParser(
