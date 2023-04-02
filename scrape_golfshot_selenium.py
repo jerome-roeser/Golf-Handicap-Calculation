@@ -58,14 +58,14 @@ def scrape_golfshot(login, password, number=1):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Download GolfShot data')
-    parser.add_argument('-r', '--rounds', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
+    parser.add_argument('-n', '--number', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
     parser.add_argument('-u', '--username', type=str, help='Username for GolfShot account')
     return parser.parse_args()
     
 
 if __name__ == '__main__':
     args = get_args()
-    number_of_rounds = args.rounds if args.rounds else NUMBER_OF_ROUNDS
+    number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
     password = getpass('Enter your password: ')
     

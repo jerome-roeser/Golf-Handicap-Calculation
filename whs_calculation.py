@@ -53,7 +53,7 @@ def get_scorecard_dataframe(scorecard):
     path_to_scorecard = f'data/scorecards/{scorecard}'
     return pd.read_excel(path_to_scorecard, index_col=0)
 
-def process_scorecard_for_index_calculation(scorecard):
+def process_scorecard(scorecard):
     """
    
     """
@@ -61,22 +61,36 @@ def process_scorecard_for_index_calculation(scorecard):
     df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
     df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
     l = [x for x in scorecard.split('_')]
-    
-    
-    slope, sss = float(l[3].split()[-1]), float(l[3].split()[-2])
-    coup_supp = 0
-    if df.iloc[4].isna().any():
-        coup_supp += 1
-        # slope = slope * 2
-        # sss = sss * 2
     hcp_course = float(l[4][-9:-6])
        
     # sort out columns and calculate CR and SBA from course handicap
-    if len(df.columns) < 21:
-        df = df.iloc[1:4].drop(columns=['Out', 'Total'])
-        # df = df.iloc[1:4].drop(columns=['Out', 'Total'])
-    else:
-        df = df.iloc[1:4].drop(columns=['Out', 'In', 'Total'])
+    df = df.iloc[1:4].drop(columns=['Out', 'In', 'Total'])
+    df.loc['CR'] = [hcp_course // 18 + 1 
+                    if df.loc['Handicap'][i] <= hcp_course % 18 
+                    else hcp_course // 18 
+                    for i in range(0,18)]
+    df.fillna(df.loc['Par']+ df.loc['CR'], inplace=True)
+    df.loc['ndb'] = df.loc['Par'] + df.loc['CR'] + 2
+    df.loc["SBA"] = [df.iloc[2][i] 
+                    if df.iloc[2][i] < df.loc['ndb'][i] 
+                    else df.loc['ndb'][i]
+                    for i in range(0,18)]
+    return df
+
+def process_scorecard_9_holes(scorecard):
+    """
+   
+    """
+    df = get_scorecard_dataframe(scorecard)
+    df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
+    df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
+    l = [x for x in scorecard.split('_')]
+    hcp_course = float(l[4][-9:-6])
+       
+    # sort out columns and calculate CR and SBA from course handicap
+    df = pd.concat([df, df], axis=1)
+    df = df.iloc[1:4].drop(columns=['Out', 'Total'])
+    
     df.loc['CR'] = [hcp_course // 18 + 1 
                     if df.loc['Handicap'][i] <= hcp_course % 18 
                     else hcp_course // 18 
@@ -91,7 +105,7 @@ def process_scorecard_for_index_calculation(scorecard):
 
 def is_full_round(scorecard):
     df = get_scorecard_dataframe(scorecard)
-    if df.iloc[4].isna().any():
+    if df.iloc[4].isna().any() or len(df.columns) < 21:
         return False
     else:
         return True
@@ -114,14 +128,19 @@ def Nbt_entry(scorecard):
 def score_brut_ajuste(scorecard):
     l = [x for x in scorecard.split('_')]
     df = get_scorecard_dataframe(scorecard)
-    processed_df = process_scorecard_for_index_calculation(scorecard)
     coup_supp = 0
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
-    if df.iloc[4].isna().any() or len(df.columns) < 21:
+    if df.iloc[4].isna().any():
+        processed_df = process_scorecard(scorecard)
+        coup_supp += 1
+    elif len(df.columns) < 21:
+        processed_df = process_scorecard_9_holes(scorecard)
         coup_supp += 1
         slope = slope * 2
         sss = sss * 2
+    else:
+        processed_df = process_scorecard(scorecard)
     sba = int(sum(processed_df.loc['SBA'])) + coup_supp
     return sba
     
@@ -133,7 +152,6 @@ def table_row(scorecard):
       a row for the final excel file"""
     l = [x for x in scorecard.split('_')]
     df = get_scorecard_dataframe(scorecard)
-    processed_df = process_scorecard_for_index_calculation(scorecard)
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
     sba = score_brut_ajuste(scorecard)
@@ -162,12 +180,12 @@ def table_row(scorecard):
 
 def fill_index_table(new_rows):
     df = pd.read_excel('templates/_fiche_historique_index.xlsx')
-    df = df.append(new_rows, ignore_index=True)
+    df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
     df = df.drop_duplicates(subset=['Date', 'Score'])
     df.Date = pd.to_datetime(df.Date)
     df = df.sort_values(by='Date', ascending=False)
     df.Date = df.Date.dt.strftime('%d %B %Y')
-    
+    df.Idx = index_series_calc(df)
     df.to_excel(f'data/fiche_historique_index_{player}.xlsx', index=False)
     
 
@@ -184,23 +202,23 @@ def index_calc(entries):
     elif length == 5:
         return sorted_entries[0]
     elif length == 6:
-        return np.mean(sorted_entries[:2]) - 1.0
+        return round(np.mean(sorted_entries[:2])) - 1.0
     elif length <=8:
-        return np.mean(sorted_entries[:2])
+        return round(np.mean(sorted_entries[:2]))
     elif length <= 11:
-        return np.mean(sorted_entries[:3])
+        return round(np.mean(sorted_entries[:3]))
     elif length <= 14:
-        return np.mean(sorted_entries[:4])
+        return round(np.mean(sorted_entries[:4]))
     elif length <= 16:
-        return np.mean(sorted_entries[:5])
+        return round(np.mean(sorted_entries[:5]))
     elif length <= 18:
         return round(np.mean(sorted_entries[:6]), 1)
     elif length == 19:
-        return np.mean(sorted_entries[:7])
+        return round(np.mean(sorted_entries[:7]))
     else:
         return round(np.mean(sorted(entries[-20:])[:8]), 1)
 
-def algorithm(df):
+def index_series_calc(df):
     length = len(df.Diff)
     for i in range(length):
         l = [df.Diff.iloc[i] for i in range(i,length)]
