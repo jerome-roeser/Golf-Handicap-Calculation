@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from getpass import getpass
 from pathlib import Path
-from scrape_golfshot_selenium import scrape_golfshot
+from scrape_scorecards import scrape_golfshot
 import pandas as pd
 import numpy as np
 
