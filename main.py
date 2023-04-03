@@ -221,7 +221,10 @@ def index_calc(entries):
 def index_series_calc(df):
     length = len(df.Diff)
     for i in range(length):
-        l = [df.Diff.iloc[i] for i in range(i,length)]
+        if i + 20 <= length:
+            l = [df.Diff.iloc[i] for i in range(i,i+20)]
+        else:
+            l = [df.Diff.iloc[i] for i in range(i,length)]
         df.Idx.iloc[i] = index_calc(l)
     return df.Idx
 
