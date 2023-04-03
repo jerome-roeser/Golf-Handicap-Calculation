@@ -137,7 +137,7 @@ def score_brut_ajuste(scorecard):
     elif len(df.columns) < 21:
         processed_df = process_scorecard_9_holes(scorecard)
         coup_supp += 1
-        slope = slope * 2
+        # slope = slope * 2
         sss = sss * 2
     else:
         processed_df = process_scorecard(scorecard)
