@@ -21,7 +21,7 @@ NUMBER_OF_ROUNDS = 1
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
 # webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
 webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
-#^Download from: https://chromedriver.chromium.org/
+# ^Download from: https://chromedriver.chromium.org/
 
 
 def scrape_golfshot(login, password, number=1):
@@ -51,24 +51,29 @@ def scrape_golfshot(login, password, number=1):
         print(f"[+++] {golf_course} on {round_date[0]}...")
         dfs = pd.read_html(driver.page_source, index_col=0)
         dfs[0].iloc[:6] = dfs[0].iloc[:6].apply(pd.to_numeric, errors='coerce')
-        dfs[0].iloc[-3:] = dfs[0].iloc[-3:].apply(pd.to_numeric, errors='coerce')
+        dfs[0].iloc[-3:] = dfs[0].iloc[-3:].apply(
+            pd.to_numeric, errors='coerce')
         dfs[0].to_excel(
             f'data/scorecards/{player_name}_{round_date[0]}_{golf_course}_{golf_course_tees[0]}_{course_handicap}.xlsx')
     driver.quit()
 
+
 def get_args():
     parser = argparse.ArgumentParser(description='Download GolfShot data')
-    parser.add_argument('-n', '--number', type=int, help='number of scorecards to import (Default = 1 i.e. the last round')
-    parser.add_argument('-u', '--username', type=str, help='Username for GolfShot account')
+    parser.add_argument('-n', '--number', type=int,
+                        help='number of scorecards to import (Default = 1 i.e. the last round')
+    parser.add_argument('-u', '--username', type=str,
+                        help='Username for GolfShot account')
     return parser.parse_args()
-    
+
 
 if __name__ == '__main__':
     args = get_args()
     number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
     password = getpass('Enter your password: ')
-    
-    print(f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
+
+    print(
+        f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
 
     scrape_golfshot(login, password, number_of_rounds)
