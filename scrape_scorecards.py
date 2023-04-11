@@ -8,6 +8,7 @@ Created on Sun Mar  5 15:34:34 2023
 
 # import time
 from getpass import getpass
+from pathlib import Path
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 
@@ -25,6 +26,15 @@ webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
 
 
 def scrape_golfshot(login, password, number=1):
+    """
+    This function logs into a golf score tracking website, scrapes data from a specified number of
+    rounds, and saves the data as Excel files.
+    
+    :param login: The email or username used to log in to the Golfshot account
+    :param password: The password is the login password for the Golfshot account
+    :param number: The number parameter is an optional integer that specifies the number of golf rounds
+    to scrape. If not provided, it defaults to 1, defaults to 1 (optional)
+    """
     driver = Chrome(executable_path=webdriver)
     driver.get("https://play.golfshot.com/signin")
 
@@ -59,9 +69,14 @@ def scrape_golfshot(login, password, number=1):
 
 
 def get_args():
+    """
+    This function defines and parses command line arguments for downloading GolfShot data.
+    :return: The function `get_args()` is returning the parsed arguments from the command line using the
+    `argparse` module.
+    """
     parser = argparse.ArgumentParser(description='Download GolfShot data')
     parser.add_argument('-n', '--number', type=int,
-                        help='number of scorecards to import (Default = 1 i.e. the last round')
+                        help='number of scorecards to import (Default = 1 -- the last round)')
     parser.add_argument('-u', '--username', type=str,
                         help='Username for GolfShot account')
     return parser.parse_args()
@@ -72,6 +87,9 @@ if __name__ == '__main__':
     number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
     password = getpass('Enter your password: ')
+    path = Path()
+    if not path.joinpath('data/scorecards').exists():
+        path.joinpath('data/scorecards').mkdir()
 
     print(
         f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
