@@ -30,9 +30,15 @@ player = 'Jerome Roeser'
 
 def get_scorecard_list_from_folder(player, last_round=5):
     """
-    looks for .xlxs scorecards
-    Input a player name
-    returns a list (dict?) of scorecard dataframes (max 20)
+    This function searches for Excel scorecards in a specified folder for a given player and returns a
+    list of their filenames.
+    
+    :param player: The name of the player whose scorecards are being searched for
+    :param last_round: The parameter `last_round` is an optional integer parameter with a default value
+    of 5. It is used to specify the maximum number of scorecards to be returned for the given player. If
+    not specified, the function will return a maximum of 5 scorecards, defaults to 5 (optional)
+    :return: a list of file names (strings) that match the input player name and are located in the
+    specified folder path.
     """
     path = Path('./data/scorecards/')
     scorecard_list = []
@@ -44,8 +50,11 @@ def get_scorecard_list_from_folder(player, last_round=5):
 
 def get_scorecard_dataframe(scorecard):
     """
-    takes an excel file as an argument
-    returns a dataframe
+    The function takes an excel file as an argument and returns a dataframe.
+    
+    :param scorecard: The parameter "scorecard" is a string that represents the name of an Excel file
+    that contains a scorecard
+    :return: A pandas dataframe is being returned.
     """
     path_to_scorecard = f'data/scorecards/{scorecard}'
     return pd.read_excel(path_to_scorecard, index_col=0)
@@ -53,7 +62,12 @@ def get_scorecard_dataframe(scorecard):
 
 def process_scorecard(scorecard):
     """
-
+    The function processes a golf scorecard by converting certain columns to numeric values, calculating
+    course rating and slope, and returning a dataframe with the relevant information.
+    
+    :param scorecard: The scorecard parameter is a string containing information about a golf course's
+    holes, including par, handicap, and score information
+    :return: a pandas DataFrame that has been processed and modified based on the input scorecard.
     """
     df = get_scorecard_dataframe(scorecard)
     df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
@@ -104,6 +118,16 @@ def process_scorecard_9_holes(scorecard):
 
 
 def is_full_round(scorecard):
+    """
+    The function checks if a scorecard is a full round by verifying if it has 21 columns and no missing
+    values in the fifth row.
+    
+    :param scorecard: The scorecard parameter is a data structure that contains information about a
+    round of golf, such as the scores for each hole and the player's name. It could be a dictionary, a
+    list, or any other data structure that can hold this information
+    :return: a boolean value (True or False) depending on whether the input scorecard is a full round or
+    not.
+    """
     df = get_scorecard_dataframe(scorecard)
     if df.iloc[4].isna().any() or len(df.columns) < 21:
         return False
@@ -112,6 +136,15 @@ def is_full_round(scorecard):
 
 
 def starting_tee(scorecard):
+    """
+    The function returns the starting tee for a golf round based on the scorecard provided.
+    
+    :param scorecard: The scorecard parameter is a data structure that contains information about a
+    round of golf, such as the player's name, the course being played, and the scores for each hole. It
+    could be a dictionary, a list, or any other data structure that can hold this information
+    :return: The function `starting_tee` returns an integer value, either 10 or 1, depending on the
+    conditions specified in the code.
+    """
     df = get_scorecard_dataframe(scorecard).fillna(0)
     if not is_full_round(scorecard) and df.iloc[3, 0] == 0:
         return 10
@@ -120,6 +153,17 @@ def starting_tee(scorecard):
 
 
 def Nbt_entry(scorecard):
+    """
+    The function returns the appropriate next tee box entry for a golf scorecard based on whether it is
+    a full round or not and which tee box the player started on.
+    
+    :param scorecard: It is a data structure that represents the scores of a golfer for each hole in a
+    round of golf. It could be a list, dictionary, or any other data structure that allows for storing
+    and accessing scores for each hole
+    :return: The function `Nbt_entry` returns either the integer `18`, the string `'9A'`, or the string
+    `'9R'`. The specific value returned depends on the input `scorecard` and the results of the
+    `is_full_round` and `starting_tee` functions.
+    """
     if is_full_round(scorecard):
         return 18
     elif not is_full_round(scorecard) and starting_tee(scorecard) == 1:
@@ -152,6 +196,20 @@ def score_brut_ajuste(scorecard):
 
 
 def score_differentiel(sba, slope, sss):
+    """
+    The function calculates the differential score between a player's score average and the course
+    rating based on the slope rating.
+    
+    :param sba: Stands for "Starch Breakdown Ability". It is a measure of the ability of flour to break
+    down starch into simple sugars during baking
+    :param slope: The slope is a measure of the steepness of a line. In this context, it is likely
+    referring to the slope of a golf course, which is a measure of the difficulty of the course. A
+    higher slope indicates a more difficult course
+    :param sss: The sss parameter is likely an abbreviation for "standard scratch score," which is a
+    measure of the difficulty of a golf course. It is used to calculate a golfer's handicap
+    :return: the score differential calculated using the formula: (113/slope) * (sba-sss), rounded to
+    one decimal place.
+    """
     return round((113/slope) * (sba-sss), 1)
 
 
