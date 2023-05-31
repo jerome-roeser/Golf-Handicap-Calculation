@@ -12,6 +12,7 @@ you can choose:
 
 # install dependencies:
 
-
+```
 pip install -r requirments.txt
+```
 
