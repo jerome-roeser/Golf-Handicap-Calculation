@@ -25,7 +25,7 @@ webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
 # ^Download from: https://chromedriver.chromium.org/
 
 
-def scrape_golfshot(login, password, number=1):
+def scrape_golfshot(login, password, profile_id, number=1):
     """
     This function logs into a golf score tracking website, scrapes data from a specified number of
     rounds, and saves the data as Excel files.
@@ -46,6 +46,9 @@ def scrape_golfshot(login, password, number=1):
     password_field.send_keys(Keys.RETURN)
 
     base_url = 'https://play.golfshot.com'
+    url_friend_profile = base_url + f"/profiles/{profile_id}/rounds"
+    if profile_id:
+        driver.get(url_friend_profile)
     round_ids = driver.find_elements('tag name', 'tr')
     suffixes = [i.get_attribute('data-href') for i in round_ids[2:]]
     for i, suffix in enumerate(suffixes[:number]):
@@ -78,7 +81,9 @@ def get_args():
     parser.add_argument('-n', '--number', type=int,
                         help='number of scorecards to import (Default = 1 -- the last round)')
     parser.add_argument('-u', '--username', type=str,
-                        help='Username for GolfShot account')
+                        help='Username for login in GolfShot account')
+    parser.add_argument('-p', '--profile_id', type=str,
+                        help='the profile id to be screened, if not the data of the user has to be scraped')
     return parser.parse_args()
 
 
@@ -86,6 +91,7 @@ if __name__ == '__main__':
     args = get_args()
     number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
+    profile_id = args.profile_id if args.profile_id else None
     password = getpass('Enter your password: ')
     path = Path()
     if not path.joinpath('data/scorecards').exists():
@@ -94,4 +100,4 @@ if __name__ == '__main__':
     print(
         f'collecting last {number_of_rounds} (type = {type(number_of_rounds)}) scorecards....')
 
-    scrape_golfshot(login, password, number_of_rounds)
+    scrape_golfshot(login, password, profile_id, number_of_rounds)

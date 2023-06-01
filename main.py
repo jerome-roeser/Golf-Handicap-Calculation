@@ -25,7 +25,7 @@ SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
 FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
 USER_NAME = 'jerome.roeser@gmail.com'
 NUMBER_OF_ROUNDS = 1
-player = 'Jerome Roeser'
+PLAYER = 'Jerome Roeser'
 
 
 def get_scorecard_list_from_folder(player, last_round=5):
@@ -314,10 +314,14 @@ def get_args():
                         help='Username for GolfShot account')
     parser.add_argument('-r', '--refresh', action='store_true',
                         help='Refresh local copy of the disposable domains file.')
+    parser.add_argument('-p', '--player',  type=str,
+                        help='player name, used for parsing scorecards (should match with player name in scorecard folder)')
+    parser.add_argument('-i', '--profile_id', type=str,
+                        help='the profile id to be screened, if not the data of the user has to be scraped')
     return parser.parse_args()
 
 
-def main(refresh=False):
+def main(player, refresh=False):
     """
     We assume the correct index is updated and used for each round of golf.
     For a scorecard the correct player index is used and thus the correct 
@@ -328,12 +332,9 @@ def main(refresh=False):
     For each row the index is calculated by taking into account only earlier rounds. 
     Export the historique d'index file
     """
-    # parse scorecards in shotzoom and save as excel, create scorecard list
     if refresh:
-        # if necessary last 5 or last 20 rounds
-        scrape_golfshot(login, password, number_of_rounds)
-    scorecard_list = get_scorecard_list_from_folder(
-        player)  # if necessary last 5 or last 20 rounds
+        scrape_golfshot(login, password, profile_id, number_of_rounds)
+    scorecard_list = get_scorecard_list_from_folder(player)
     entries = [table_row(i) for i in scorecard_list]
     fill_index_table(entries)
 
@@ -343,7 +344,9 @@ if __name__ == '__main__':
     number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
     refresh = args.refresh
+    player = args.player if args.player else PLAYER
+    profile_id = args.profile_id if args.profile_id else None
     if refresh:
         password = getpass('Enter your password: ')
 
-    main(refresh)
+    main(player, refresh)
