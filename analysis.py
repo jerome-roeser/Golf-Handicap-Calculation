@@ -34,9 +34,9 @@ for ax in axs:
 fig, ax = plt.subplots()
 
 # ax.scatter(df.loc[:,'N°'], df.Diff)
-ax.scatter(df.index, df.Diff)
+ax.scatter(df.index, df.Idx)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
-ax.scatter(df_2.index, df_2.Diff)
+ax.scatter(df_2.index, df_2.Idx)
 ax.set(ylim=(0, 54))
 
 
