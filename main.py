@@ -26,6 +26,7 @@ FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
 USER_NAME = 'jerome.roeser@gmail.com'
 NUMBER_OF_ROUNDS = 1
 PLAYER = 'Jerome Roeser'
+id_gaetan = 'lOP2RM'
 
 
 def get_scorecard_list_from_folder(player, last_round=5):

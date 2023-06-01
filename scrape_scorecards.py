@@ -17,6 +17,7 @@ import pandas as pd
 
 
 USER_NAME = 'jerome.roeser@gmail.com'
+USER_ID = 'xG6ggB'
 NUMBER_OF_ROUNDS = 1
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
@@ -46,7 +47,7 @@ def scrape_golfshot(login, password, profile_id, number=1):
     password_field.send_keys(Keys.RETURN)
 
     base_url = 'https://play.golfshot.com'
-    url_friend_profile = base_url + f"/profiles/{profile_id}/rounds"
+    url_friend_profile = base_url + f"/profiles/{profile_id}/rounds?sb=Date&sd=Descending&p=2"
     if profile_id:
         driver.get(url_friend_profile)
     round_ids = driver.find_elements('tag name', 'tr')
@@ -91,7 +92,7 @@ if __name__ == '__main__':
     args = get_args()
     number_of_rounds = args.number if args.number else NUMBER_OF_ROUNDS
     login = args.username if args.username else USER_NAME
-    profile_id = args.profile_id if args.profile_id else None
+    profile_id = args.profile_id if args.profile_id else USER_ID
     password = getpass('Enter your password: ')
     path = Path()
     if not path.joinpath('data/scorecards').exists():

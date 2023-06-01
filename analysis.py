@@ -1,3 +1,4 @@
+#%%
 import argparse
 from datetime import datetime
 from getpass import getpass
@@ -7,7 +8,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+#%%
 
 """
 Index(['Unnamed: 0', 'N°', 'Nom', 'T', 'Date', 'NbT', 'Fml', 'Golf', 'Terrain',
@@ -22,6 +23,9 @@ fiche_index_2 = 'data/fiche_historique_index_Jerome Roeser.xlsx'
 df = pd.read_excel(fiche_index)
 df_2 = pd.read_excel(fiche_index_2)
 
+df.Date = pd.to_datetime(df.Date)
+df_2.Date = pd.to_datetime(df_2.Date)
+
 #%%
 fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(9, 4))
 axs[0].violinplot(df.Diff)
@@ -34,10 +38,11 @@ for ax in axs:
 fig, ax = plt.subplots()
 
 # ax.scatter(df.loc[:,'N°'], df.Diff)
-ax.scatter(df.index, df.Idx)
+ax.scatter(df.Date, df.Diff)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
-ax.scatter(df_2.index, df_2.Idx)
-ax.set(ylim=(0, 54))
+ax.scatter(df_2.Date, df_2.Diff)
+# ax.set(ylim=(0, 54))
+# ax.set(xlim=(datetime.date(2023,2,1),datetime.date(2023,6,1)))
 
 
 
