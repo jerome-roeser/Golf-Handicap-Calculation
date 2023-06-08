@@ -14,15 +14,15 @@ main.py [-h] [-n NUMBER] [-u USERNAME] [-r] [-p PLAYER] [-i PROFILE_ID]
 ```
 
 options:
-  -h, --help            show this help message and exit
-  -n NUMBER, --number NUMBER
+  *-h, --help            show this help message and exit
+  *-n NUMBER, --number NUMBER
                         number of scorecards to import (Default = 1 i.e. the last round)
-  -u USERNAME, --username USERNAME
+  *-u USERNAME, --username USERNAME
                         Username for GolfShot account
-  -r, --refresh         Refresh local copy of the disposable domains file.
-  -p PLAYER, --player PLAYER
+  *-r, --refresh         Refresh local copy of the disposable domains file.
+  *-p PLAYER, --player PLAYER
                         player name, used for parsing scorecards (should match with player name in scorecard folder)
-  -i PROFILE_ID, --profile_id PROFILE_ID
+  *-i PROFILE_ID, --profile_id PROFILE_ID
                         the profile id to be screened, if not the data of the user has to be scraped
 
 
