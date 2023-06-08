@@ -24,6 +24,7 @@ import numpy as np
 SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
 FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
 USER_NAME = 'jerome.roeser@gmail.com'
+USER_ID = 'xG6ggB'
 NUMBER_OF_ROUNDS = 1
 PLAYER = 'Jerome Roeser'
 id_gaetan = 'lOP2RM'
@@ -305,12 +306,11 @@ def index_series_calc(df):
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description='Upadte WHS for a player.',
-        epilog="""should probably cite examples here instead 
-        of writing this silly text"""
+        description='calculate a golf player index according to the world handicap system.',
+        epilog="""Can be adapted for statistics visualization"""
     )
     parser.add_argument('-n', '--number', type=int,
-                        help='number of scorecards to import (Default = 1 i.e. the last round')
+                        help='number of scorecards to import (Default = 1 i.e. the last round)')
     parser.add_argument('-u', '--username', type=str,
                         help='Username for GolfShot account')
     parser.add_argument('-r', '--refresh', action='store_true',
@@ -318,7 +318,7 @@ def get_args():
     parser.add_argument('-p', '--player',  type=str,
                         help='player name, used for parsing scorecards (should match with player name in scorecard folder)')
     parser.add_argument('-i', '--profile_id', type=str,
-                        help='the profile id to be screened, if not the data of the user has to be scraped')
+                        help='the profile id to be scraped, if not the data of the user has to be scraped')
     return parser.parse_args()
 
 
@@ -346,7 +346,7 @@ if __name__ == '__main__':
     login = args.username if args.username else USER_NAME
     refresh = args.refresh
     player = args.player if args.player else PLAYER
-    profile_id = args.profile_id if args.profile_id else None
+    profile_id = args.profile_id if args.profile_id else USER_ID
     if refresh:
         password = getpass('Enter your password: ')
 

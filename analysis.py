@@ -27,10 +27,11 @@ df.Date = pd.to_datetime(df.Date)
 df_2.Date = pd.to_datetime(df_2.Date)
 
 #%%
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(9, 4))
-axs[0].violinplot(df.Diff)
-axs[1].violinplot(df_2.Diff)
-
+fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(9, 4))
+axs[0,0].violinplot(df.Diff)
+axs[0,1].violinplot(df_2.Diff)
+axs[1,0].scatter(df.Date, df.Diff)
+axs[1,1].scatter(df_2.Date, df_2.Diff)
 for ax in axs:
     ax.set(ylim=(0, 100))
     
@@ -38,9 +39,9 @@ for ax in axs:
 fig, ax = plt.subplots()
 
 # ax.scatter(df.loc[:,'N°'], df.Diff)
-ax.scatter(df.Date, df.Diff)
+# ax.scatter(df.Date, df.Diff)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
-ax.scatter(df_2.Date, df_2.Diff)
+# ax.scatter(df_2.Date, df_2.Diff)
 # ax.set(ylim=(0, 54))
 # ax.set(xlim=(datetime.date(2023,2,1),datetime.date(2023,6,1)))
 

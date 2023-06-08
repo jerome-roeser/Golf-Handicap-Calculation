@@ -47,9 +47,8 @@ def scrape_golfshot(login, password, profile_id, number=1):
     password_field.send_keys(Keys.RETURN)
 
     base_url = 'https://play.golfshot.com'
-    url_friend_profile = base_url + f"/profiles/{profile_id}/rounds?sb=Date&sd=Descending&p=2"
-    if profile_id:
-        driver.get(url_friend_profile)
+    profile_url = base_url + f"/profiles/{profile_id}/rounds?sb=Date&sd=Descending&p=1"
+    driver.get(profile_url)
     round_ids = driver.find_elements('tag name', 'tr')
     suffixes = [i.get_attribute('data-href') for i in round_ids[2:]]
     for i, suffix in enumerate(suffixes[:number]):
@@ -83,7 +82,7 @@ def get_args():
                         help='number of scorecards to import (Default = 1 -- the last round)')
     parser.add_argument('-u', '--username', type=str,
                         help='Username for login in GolfShot account')
-    parser.add_argument('-p', '--profile_id', type=str,
+    parser.add_argument('-i', '--profile_id', type=str,
                         help='the profile id to be screened, if not the data of the user has to be scraped')
     return parser.parse_args()
 
