@@ -37,7 +37,7 @@ for ax in axs:
     
 #%%
 fig, ax = plt.subplots()
-
+ax.scatter(df.Date, df.Diff)
 # ax.scatter(df.loc[:,'N°'], df.Diff)
 # ax.scatter(df.Date, df.Diff)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
