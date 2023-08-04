@@ -32,8 +32,9 @@ axs[0,0].violinplot(df.Diff)
 axs[0,1].violinplot(df_2.Diff)
 axs[1,0].scatter(df.Date, df.Diff)
 axs[1,1].scatter(df_2.Date, df_2.Diff)
-for ax in axs:
-    ax.set(ylim=(0, 100))
+for i in range(2):
+    for j in range(2):
+        axs[i,j].set(ylim=(0 , 54))
     
 #%%
 fig, ax = plt.subplots()
