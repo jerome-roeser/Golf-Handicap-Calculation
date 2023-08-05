@@ -44,7 +44,8 @@ for i in range(2):
         axs[0,j].set_ylim(0 , 100)
         axs[1,j].set_ylim(0 , 60)
         axs[1,j].set_xlim(date2num(start_date), date2num(end_date))
-        # axs[1,j].set_xticks(rotation=45, ha='right')
+        axs[1,j].tick_params(axis='x', rotation=45), 
+        # axs[1,j].set_xticks(rotation=45, ha='right',)
         axs[1,j].xaxis.set_major_locator(locator)
         axs[1,j].xaxis.set_major_formatter(formatter)
     
@@ -55,6 +56,7 @@ locator = AutoDateLocator()
 formatter = ConciseDateFormatter(locator)
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_major_formatter(formatter)
+ax.tick_params('x', rotation = 45)
 # ax.scatter(df.loc[:,'N°'], df.Diff)
 # ax.scatter(df.Date, df.Diff)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
