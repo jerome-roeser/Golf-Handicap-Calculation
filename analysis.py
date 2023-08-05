@@ -69,7 +69,7 @@ ax.tick_params('x', rotation = 45)
 
 
 #%%
-"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -99,7 +99,7 @@ for ax in axs:
                   labels=['x1', 'x2', 'x3', 'x4'])
     ax.set_xlabel('Four separate samples')
     ax.set_ylabel('Observed values')
-
+"""
 plt.show()
 """
 # %%
