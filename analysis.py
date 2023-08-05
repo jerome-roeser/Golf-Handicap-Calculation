@@ -8,6 +8,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.dates import date2num, AutoDateLocator, AutoDateFormatter, ConciseDateFormatter
 #%%
 
 """
@@ -28,17 +29,32 @@ df_2.Date = pd.to_datetime(df_2.Date)
 
 #%%
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(9, 4))
+locator = AutoDateLocator()
+formatter = AutoDateFormatter(locator)
+start_date = datetime(2022, 5, 1)
+end_date = datetime(2023, 8, 1)
 axs[0,0].violinplot(df.Diff)
 axs[0,1].violinplot(df_2.Diff)
-axs[1,0].scatter(df.Date, df.Diff)
-axs[1,1].scatter(df_2.Date, df_2.Diff)
+axs[1,0].scatter(date2num(df.Date), df.Diff)
+                
+axs[1,1].scatter(date2num(df_2.Date), df_2.Diff)
+
 for i in range(2):
     for j in range(2):
-        axs[i,j].set(ylim=(0 , 54))
+        axs[0,j].set_ylim(0 , 100)
+        axs[1,j].set_ylim(0 , 60)
+        axs[1,j].set_xlim(date2num(start_date), date2num(end_date))
+        # axs[1,j].set_xticks(rotation=45, ha='right')
+        axs[1,j].xaxis.set_major_locator(locator)
+        axs[1,j].xaxis.set_major_formatter(formatter)
     
-#%%
+ #%%
 fig, ax = plt.subplots()
-ax.scatter(df.Date, df.Diff)
+ax.scatter(date2num(df.Date), df.Diff)
+locator = AutoDateLocator()
+formatter = ConciseDateFormatter(locator)
+ax.xaxis.set_major_locator(locator)
+ax.xaxis.set_major_formatter(formatter)
 # ax.scatter(df.loc[:,'N°'], df.Diff)
 # ax.scatter(df.Date, df.Diff)
 # ax.scatter(df_2.loc[:,'N°'], df_2.Diff)
@@ -84,3 +100,4 @@ for ax in axs:
 
 plt.show()
 """
+# %%
