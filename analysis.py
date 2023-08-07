@@ -8,6 +8,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 from matplotlib.dates import date2num, AutoDateLocator, AutoDateFormatter, ConciseDateFormatter
 #%%
 
@@ -43,6 +44,9 @@ for i in range(2):
     for j in range(2):
         axs[0,j].set_ylim(0 , 100)
         axs[1,j].set_ylim(0 , 60)
+        axs[1,j].yaxis.grid(True)
+        axs[1,j].yaxis.set_major_locator(MultipleLocator(10))
+        axs[1,j].yaxis.set_minor_locator(AutoMinorLocator())
         axs[1,j].set_xlim(date2num(start_date), date2num(end_date))
         axs[1,j].tick_params(axis='x', rotation=45), 
         # axs[1,j].set_xticks(rotation=45, ha='right',)
