@@ -17,7 +17,7 @@ options:
   * *-h ->  show this help message and exit*
   * *-n ->  number of scorecards to import (Default = 1 i.e. the last round)*
   * *-u ->  Username for GolfShot account*
-  * *-r ->  Refresh local copy of the disposable domains file*
+  * *-r ->  refresh scorecards - the golfshot data will be scraped*
   * *-p ->  player name, used for parsing scorecards (should match with player name in scorecard folder)*
   * *-i ->  the profile id to be screened, if not the data of the user has to be scraped*
 
