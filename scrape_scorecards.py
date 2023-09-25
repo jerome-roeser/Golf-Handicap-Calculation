@@ -66,8 +66,10 @@ def scrape_golfshot(login, password, profile_id, number=1):
         dfs[0].iloc[:6] = dfs[0].iloc[:6].apply(pd.to_numeric, errors='coerce')
         dfs[0].iloc[-3:] = dfs[0].iloc[-3:].apply(
             pd.to_numeric, errors='coerce')
+        if not Path(f'data/scorecards/{player_name}').exists():
+            Path(f'data/scorecards/{player_name}').mkdir()
         dfs[0].to_excel(
-            f'data/scorecards/{player_name}_{round_date[0]}_{golf_course}_{golf_course_tees[0]}_{course_handicap}.xlsx')
+            f'data/scorecards/{player_name}/{player_name}_{round_date[0]}_{golf_course}_{golf_course_tees[0]}_{course_handicap}.xlsx')
     driver.quit()
 
 

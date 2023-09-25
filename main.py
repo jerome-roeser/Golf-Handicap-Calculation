@@ -42,7 +42,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
     :return: a list of file names (strings) that match the input player name and are located in the
     specified folder path.
     """
-    path = Path('./data/scorecards/')
+    path = Path(f'./data/scorecards/{player}')
     scorecard_list = []
     for p in path.iterdir():
         if p.is_file() and p.match(f'{player}*'):
@@ -50,7 +50,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
     return scorecard_list
 
 
-def get_scorecard_dataframe(scorecard):
+def get_scorecard_dataframe(scorecard, player):
     """
     The function takes an excel file as an argument and returns a dataframe.
     
@@ -58,7 +58,7 @@ def get_scorecard_dataframe(scorecard):
     that contains a scorecard
     :return: A pandas dataframe is being returned.
     """
-    path_to_scorecard = f'data/scorecards/{scorecard}'
+    path_to_scorecard = f'data/scorecards/{player}/{scorecard}'
     return pd.read_excel(path_to_scorecard, index_col=0)
 
 
@@ -71,7 +71,7 @@ def process_scorecard(scorecard):
     holes, including par, handicap, and score information
     :return: a pandas DataFrame that has been processed and modified based on the input scorecard.
     """
-    df = get_scorecard_dataframe(scorecard)
+    df = get_scorecard_dataframe(scorecard, player)
     df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
     df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
     l = [x for x in scorecard.split('_')]
@@ -96,7 +96,7 @@ def process_scorecard_9_holes(scorecard):
     """
 
     """
-    df = get_scorecard_dataframe(scorecard)
+    df = get_scorecard_dataframe(scorecard, player)
     df.iloc[:6] = df.iloc[:6].apply(pd.to_numeric, errors='coerce')
     df.iloc[-3:] = df.iloc[-3:].apply(pd.to_numeric, errors='coerce')
     l = [x for x in scorecard.split('_')]
@@ -130,7 +130,7 @@ def is_full_round(scorecard):
     :return: a boolean value (True or False) depending on whether the input scorecard is a full round or
     not.
     """
-    df = get_scorecard_dataframe(scorecard)
+    df = get_scorecard_dataframe(scorecard, player)
     if df.iloc[4].isna().any() or len(df.columns) < 21:
         return False
     else:
@@ -147,7 +147,7 @@ def starting_tee(scorecard):
     :return: The function `starting_tee` returns an integer value, either 10 or 1, depending on the
     conditions specified in the code.
     """
-    df = get_scorecard_dataframe(scorecard).fillna(0)
+    df = get_scorecard_dataframe(scorecard, player).fillna(0)
     if not is_full_round(scorecard) and df.iloc[3, 0] == 0:
         return 10
     else:
@@ -177,7 +177,7 @@ def Nbt_entry(scorecard):
 def score_brut_ajuste(scorecard):
     "calculate SBA for 18 and 9 holes scorecards."
     l = [x for x in scorecard.split('_')]
-    df = get_scorecard_dataframe(scorecard)
+    df = get_scorecard_dataframe(scorecard, player)
     coup_supp = 0
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
@@ -219,7 +219,7 @@ def table_row(scorecard):
     """returns a dictionary from a scorecard which can be used as
       a row for the final excel file"""
     l = [x for x in scorecard.split('_')]
-    df = get_scorecard_dataframe(scorecard)
+    df = get_scorecard_dataframe(scorecard, player)
     sss = float(l[3].split()[-2])
     slope = int(l[3].split()[-1])
     sba = score_brut_ajuste(scorecard)
