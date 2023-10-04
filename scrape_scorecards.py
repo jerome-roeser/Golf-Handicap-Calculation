@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  5 15:34:34 2023
-
-@author: Jerome Roeser
-"""
-
-
-# import time
 from getpass import getpass
 from pathlib import Path
 from selenium.webdriver import Chrome

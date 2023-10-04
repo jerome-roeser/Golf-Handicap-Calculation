@@ -1,17 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Oct 17 14:03:38 2022
-
-@author: roeser
-
-update WHS for a player
-input should be a scorecard.
-course data include: slope, course handicap (derived from player handicap)
-départ
-PAR
-
-"""
-
 import argparse
 from datetime import datetime
 from getpass import getpass
