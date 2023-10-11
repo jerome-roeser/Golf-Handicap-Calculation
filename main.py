@@ -5,15 +5,13 @@ from pathlib import Path
 from scrape_scorecards import scrape_golfshot
 import pandas as pd
 import numpy as np
+import os
 
 
-SHOTZOOM_URL = 'https://shotzoom.com/92836531767/golf'
-FFG_STYLE_FILE = 'fiche_historique_index_JR.xlsx'
-USER_NAME = 'jerome.roeser@gmail.com'
-USER_ID = 'xG6ggB'
+USER_NAME = os.getenv('USER_NAME')
+USER_ID = os.getenv('USER_ID')
+PLAYER = os.getenv('PLAYER')
 NUMBER_OF_ROUNDS = 1
-PLAYER = 'Jerome Roeser'
-id_gaetan = 'lOP2RM'
 
 
 def get_scorecard_list_from_folder(player, last_round=5):

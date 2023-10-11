@@ -2,18 +2,19 @@ from getpass import getpass
 from pathlib import Path
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
+import os
 
 import argparse
 import pandas as pd
 
 
-USER_NAME = 'jerome.roeser@gmail.com'
-USER_ID = 'xG6ggB'
+USER_NAME = os.getenv('USER_NAME')
+USER_ID = os.getenv('USER_ID')
 NUMBER_OF_ROUNDS = 1
 
 # webdriver = r"C:\Users\roeser\Downloads\install_files\chromedriver_win32"
-# webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
-webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
+webdriver = r"C:/Users/Jerome Roeser/Documents/chromedriver.exe"
+# webdriver = r"C:/temp/git_repos/chromedriver.exe"  # change me!
 # ^Download from: https://chromedriver.chromium.org/
 
 
