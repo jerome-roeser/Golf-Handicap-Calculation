@@ -23,11 +23,11 @@ main.py [-h] [-n NUMBER] [-u USERNAME] [-r] [-p PLAYER] [-i PROFILE_ID]
 
 options:
   * *-h ->  show this help message and exit*
-  * *-n ->  number of scorecards to import (Default = 1 i.e. the last round)*
   * *-u ->  Username for GolfShot account*
-  * *-r ->  refresh scorecards - the golfshot data will be scraped*
   * *-p ->  player name, used for parsing scorecards (should match with player name in scorecard folder)*
-  * *-i ->  the profile id to be screened, if not the data of the user has to be scraped*
+  * *-r ->  refresh scorecards - the golfshot data will be scraped*
+  * *-n ->  if refresh: number of scorecards to import (Default = 1 i.e. the last round)*
+  * *-i ->  if refresh & another user's data is to be screened: the profile id to be screened*
 
 
 
