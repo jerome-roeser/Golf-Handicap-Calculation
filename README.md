@@ -18,7 +18,7 @@ simply edit the webdriver variable with the path to your chromedriver in scrape_
 # options
 usage: 
 ```
-main.py [-h] [-n NUMBER] [-u USERNAME] [-r] [-p PLAYER] [-i PROFILE_ID]
+main.py [-h] [-u USERNAME] [-p PLAYER] [-r] [-n NUMBER] [-i PROFILE_ID]
 ```
 
 options:
