@@ -4,11 +4,14 @@ calculate a golf player index according to the world handicap system
 # how it will work 
 the script will look in a defaul folder (/data/scorecards/) for excel files of scorecards. 
 the scorecards can be filled manually_ or scraped directly from golfshot.
-If manually: use the _scorecard.xlsx template in the templates folder
+
+If manually (the exhausting way): 
+use the _scorecard.xlsx template in the templates folder
 add the files in data/scorecards/{your_name}/{your_scorecard.xlsx}
 note: the {your_name} folder and YOUR_NAME row entry in the excel file should match
+note: the name should follow the specified format. Infos are extracted from the scorecard filename
 
-If scraping (the easiest): 
+If scraping (the easiest way): 
 scraping is done with chromedriver, so chrome and corresponding chromedriver should be 
 available.
 simply edit the webdriver variable with the path to your chromedriver in scrape_scorecards.py
@@ -18,7 +21,7 @@ simply edit the webdriver variable with the path to your chromedriver in scrape_
 # options
 usage: 
 ```
-main.py [-h] [-u USERNAME] [-p PLAYER] [-r] [-n NUMBER] [-i PROFILE_ID]
+main.py [-h HELP] [-u USERNAME] [-p PLAYER] [-r] [-n NUMBER] [-i PROFILE_ID]
 ```
 
 options:
