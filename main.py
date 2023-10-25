@@ -11,6 +11,7 @@ import os
 USER_NAME = os.getenv('USER_NAME')
 USER_ID = os.getenv('USER_ID')
 PLAYER = os.getenv('PLAYER')
+FFG_STYLE_FILE = os.getenv('FFG_STYLE_FILE')
 NUMBER_OF_ROUNDS = 1
 
 
@@ -115,10 +116,11 @@ def is_full_round(scorecard):
     not.
     """
     df = get_scorecard_dataframe(scorecard, player)
-    if df.iloc[4].isna().any() or len(df.columns) < 21:
-        return False
-    else:
-        return True
+    return df.iloc[4].isna().any() or len(df.columns) >= 21
+    # if df.iloc[4].isna().any() or len(df.columns) < 21:
+    #     return False
+    # else:
+    #     return True
 
 
 def starting_tee(scorecard):
@@ -232,7 +234,7 @@ def table_row(scorecard):
 
 
 def fill_index_table(new_rows):
-    df = pd.read_excel('templates/_fiche_historique_index.xlsx')
+    df = pd.read_excel(FFG_STYLE_FILE)
     df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
     df = df.drop_duplicates(subset=['Date', 'Score'])
     
