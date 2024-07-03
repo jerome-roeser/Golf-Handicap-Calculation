@@ -3,7 +3,7 @@ import argparse
 from datetime import datetime
 from getpass import getpass
 from pathlib import Path
-from scrape_scorecards import scrape_golfshot
+from world_handicap_calculator.utils.scrape_scorecards import scrape_golfshot
 import seaborn as sns
 import pandas as pd
 import numpy as np
@@ -37,7 +37,7 @@ end_date = datetime(2023, 8, 1)
 axs[0,0].violinplot(df.Diff)
 axs[0,1].violinplot(df_2.Diff)
 axs[1,0].scatter(date2num(df.Date), df.Diff)
-                
+
 axs[1,1].scatter(date2num(df_2.Date), df_2.Diff)
 
 for i in range(2):
@@ -48,11 +48,11 @@ for i in range(2):
         axs[1,j].yaxis.set_major_locator(MultipleLocator(10))
         axs[1,j].yaxis.set_minor_locator(AutoMinorLocator())
         axs[1,j].set_xlim(date2num(start_date), date2num(end_date))
-        axs[1,j].tick_params(axis='x', rotation=45), 
+        axs[1,j].tick_params(axis='x', rotation=45),
         # axs[1,j].set_xticks(rotation=45, ha='right',)
         axs[1,j].xaxis.set_major_locator(locator)
         axs[1,j].xaxis.set_major_formatter(formatter)
-    
+
  #%%
 fig, ax = plt.subplots()
 ax.scatter(date2num(df.Date), df.Diff)
