@@ -2,24 +2,17 @@ import argparse
 from datetime import datetime
 from getpass import getpass
 from pathlib import Path
-from scrape_scorecards import scrape_golfshot
+from world_handicap_calculator.utils.scrape_rounds import scrape_rounds
+from world_handicap_calculator.params import *
 import pandas as pd
 import numpy as np
-import os
-
-
-USER_NAME = os.getenv('USER_NAME')
-USER_ID = os.getenv('USER_ID')
-PLAYER = os.getenv('PLAYER')
-FFG_STYLE_FILE = os.getenv('FFG_STYLE_FILE')
-NUMBER_OF_ROUNDS = 1
 
 
 def get_scorecard_list_from_folder(player, last_round=5):
     """
     This function searches for Excel scorecards in a specified folder for a given player and returns a
     list of their filenames.
-    
+
     :param player: The name of the player whose scorecards are being searched for
     :param last_round: The parameter `last_round` is an optional integer parameter with a default value
     of 5. It is used to specify the maximum number of scorecards to be returned for the given player. If
@@ -38,7 +31,7 @@ def get_scorecard_list_from_folder(player, last_round=5):
 def get_scorecard_dataframe(scorecard, player):
     """
     The function takes an excel file as an argument and returns a dataframe.
-    
+
     :param scorecard: The parameter "scorecard" is a string that represents the name of an Excel file
     that contains a scorecard
     :return: A pandas dataframe is being returned.
@@ -51,7 +44,7 @@ def process_scorecard(scorecard):
     """
     The function processes a golf scorecard by converting certain columns to numeric values, calculating
     course rating and slope, and returning a dataframe with the relevant information.
-    
+
     :param scorecard: The scorecard parameter is a string containing information about a golf course's
     holes, including par, handicap, and score information
     :return: a pandas DataFrame that has been processed and modified based on the input scorecard.
@@ -108,7 +101,7 @@ def is_full_round(scorecard):
     """
     The function checks if a scorecard is a full round by verifying if it has 21 columns and no missing
     values in the fifth row.
-    
+
     :param scorecard: The scorecard parameter is a data structure that contains information about a
     round of golf, such as the scores for each hole and the player's name. It could be a dictionary, a
     list, or any other data structure that can hold this information
@@ -117,16 +110,12 @@ def is_full_round(scorecard):
     """
     df = get_scorecard_dataframe(scorecard, player)
     return df.iloc[4].isna().any() or len(df.columns) >= 21
-    # if df.iloc[4].isna().any() or len(df.columns) < 21:
-    #     return False
-    # else:
-    #     return True
 
 
 def starting_tee(scorecard):
     """
     The function returns the starting tee for a golf round based on the scorecard provided.
-    
+
     :param scorecard: The scorecard parameter is a data structure that contains information about a
     round of golf, such as the player's name, the course being played, and the scores for each hole. It
     could be a dictionary, a list, or any other data structure that can hold this information
@@ -144,7 +133,7 @@ def Nbt_entry(scorecard):
     """
     The function returns the appropriate next tee box entry for a golf scorecard based on whether it is
     a full round or not and which tee box the player started on.
-    
+
     :param scorecard: It is a data structure that represents the scores of a golfer for each hole in a
     round of golf. It could be a list, dictionary, or any other data structure that allows for storing
     and accessing scores for each hole
@@ -171,7 +160,7 @@ def score_brut_ajuste(scorecard):
     if df.iloc[4].isna().any():
         processed_df = process_scorecard(scorecard)
         coup_supp += 1
-    # for 9 holes scorecards of a 9 holes course 
+    # for 9 holes scorecards of a 9 holes course
     elif len(df.columns) < 21:
         processed_df = process_scorecard_9_holes(scorecard)
         coup_supp += 1
@@ -187,7 +176,7 @@ def score_differentiel(sba, slope, sss):
     """
     The function calculates the differential score between a player's score average and the course
     rating based on the slope rating.
-    
+
     :param sba: Stands for "Starch Breakdown Ability". It is a measure of the ability of flour to break
     down starch into simple sugars during baking
     :param slope: The slope is a measure of the steepness of a line. In this context, it is likely
@@ -237,13 +226,13 @@ def fill_index_table(new_rows):
     df = pd.read_excel(FFG_STYLE_FILE)
     df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
     df = df.drop_duplicates(subset=['Date', 'Score'])
-    
-    # sort table by descending date 
+
+    # sort table by descending date
     df.Date = pd.to_datetime(df.Date)
     df = df.sort_values(by='Date', ascending=False)
     df.Date = df.Date.dt.strftime('%d %B %Y')
 
-    # calculate index on rolling 20 scores 
+    # calculate index on rolling 20 scores
     df.Idx = index_series_calc(df)
     df.to_excel(f'data/fiche_historique_index_{player}.xlsx', index=False)
 
@@ -311,12 +300,12 @@ def get_args():
 def main(player, refresh=False):
     """
     We assume the correct index is updated and used for each round of golf.
-    For a scorecard the correct player index is used and thus the correct 
+    For a scorecard the correct player index is used and thus the correct
     course handicap is used. As such score brut ajusté and score différentiel
-    should be accurate. 
-    Main function should update the historique d'index file. 
+    should be accurate.
+    Main function should update the historique d'index file.
     Import the local file and add a row entry for every round.
-    For each row the index is calculated by taking into account only earlier rounds. 
+    For each row the index is calculated by taking into account only earlier rounds.
     Export the historique d'index file
     """
     if refresh:

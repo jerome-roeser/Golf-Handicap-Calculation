@@ -1,27 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  5 18:23:46 2023
-
-credit for untitled: tinman6/golfshot-downloader
-
-@author: tinman6
-"""
-
-#!/usr/bin/python
 
 import argparse
+import json
+import pandas as pd
+import re
+import requests
+
 from bs4 import BeautifulSoup
 from html.parser import HTMLParser
 from lxml import etree
-import json
-import re
-import requests
-import pandas as pd 
-
-GOLFSHOT_URL = 'https://play.golfshot.com'
-USER_NAME = 'jerome.roeser@gmail.com'
-USER_ID = 'xG6ggB'
-USER_UNTIL = '420or2'
+from pathlib import Path
+from world_handicap_calculator.params import *
 
 
 class RoundParser(HTMLParser):
@@ -52,7 +40,9 @@ def download_course(session, course_id):
   scorecard = session.get(p.results['source']).json()[
       'scorecard']  # remove unused siblings
 
-  with open('data/courses/%s.json' % course_id, 'w') as f:
+  if not Path('data/courses').exists():
+      Path('data/courses').mkdir(parents=True)
+  with open(f'data/courses/{course_id}.json', 'w') as f:
     ret = {'courseId': course_id,
            'courseUuid': course_uuid,
            'scorecard': scorecard}
@@ -66,7 +56,12 @@ def download_round(session, profile_id, round_id):
   p = RoundParser()
   p.feed(res.text)
   dfs. append(pd.read_html(res.content, index_col=0))
-  with open('data/rounds/%s.json' % p.results['roundGroupId'], 'w') as f:
+
+  if not Path('data/rounds').exists():
+      Path('data/rounds').mkdir(parents=True)
+  round_id = p.results['roundGroupId']
+  round_date = p.results['model']['detail']['startTime'].split('T')[0]
+  with open(f"data/rounds/{round_date}_{round_id}.json", 'w') as f:
     json.dump(p.results, f)
 
   download_course(session, p.results['model']['detail']['golfCourseWebId'])
@@ -89,36 +84,45 @@ def download_rounds(session, profile_id, last_round=None):
     for row in round_table.tbody.findAll('tr'):
       round_id = row.attrs['data-href'].split('/')[-1]
       if round_id == last_round:
+        print(f"################## {round_id} is the culprit...")
         download_rounds = False
         break
-      print('Downloading %s...' % round_id)
+      print(f'Downloading {round_id}...')
       download_round(session, profile_id, round_id)
 
     params['p'] += 1
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Download GolfShot data')
+    parser.add_argument('username', nargs='?', help='Username for GolfShot account')
+    parser.add_argument('password', nargs='?', help='Password for GolfShot account')
+    parser.add_argument('profile_id', nargs='?', help='Profile ID for GolfShot account')
+    parser.add_argument(
+        '--until', help='Download rounds until specified round (by descending date)')
+    return parser.parse_args()
 
-parser = argparse.ArgumentParser(description='Download GolfShot data')
-parser.add_argument('username', nargs='?', help='Username for GolfShot account')
-parser.add_argument('password', help='Password for GolfShot account')
-parser.add_argument('profile_id', nargs='?', help='Profile ID for GolfShot account')
-parser.add_argument(
-    '--until', help='Download rounds until specified round (by descending date)')
-args = parser.parse_args()
 
-login = args.username if args.username else USER_NAME
-golfshot_id = args.profile_id if args.profile_id else USER_ID
-until = args.until if args.until else USER_UNTIL
+def scrape_rounds():
+    args = get_args()
 
-with requests.Session() as session:
-  tokenRequest = session.get(f'{GOLFSHOT_URL}/signin')
-  parser = etree.HTMLParser()
-  tree = etree.fromstring(tokenRequest.text, parser)
-  verificationToken = tree.xpath(
-      '//form//input[@name="__RequestVerificationToken"]/@value')[0]
-  signin = session.post(f'{GOLFSHOT_URL}/signin',
-                        data={'Email': login,
-                              'Password': args.password,
-                              '__RequestVerificationToken': verificationToken,
-                              })
+    login = args.username if args.username else USER_NAME
+    password = args.password if args.password else PASSWORD
+    golfshot_id = args.profile_id if args.profile_id else USER_ID
+    until = args.until if args.until else USER_UNTIL
 
-  download_rounds(session, golfshot_id, until)
+    with requests.Session() as session:
+        tokenRequest = session.get(f'{GOLFSHOT_URL}/signin')
+        parser = etree.HTMLParser()
+        tree = etree.fromstring(tokenRequest.text, parser)
+        verificationToken = tree.xpath(
+            '//form//input[@name="__RequestVerificationToken"]/@value')[0]
+        signin = session.post(f'{GOLFSHOT_URL}/signin',
+                                data={'Email': login,
+                                    'Password': password,
+                                    '__RequestVerificationToken': verificationToken,
+                                    })
+
+        download_rounds(session, golfshot_id, until)
+
+if __name__ == '__main__':
+    scrape_rounds()
