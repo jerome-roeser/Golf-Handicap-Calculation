@@ -3,7 +3,7 @@ import argparse
 from datetime import datetime
 from getpass import getpass
 from pathlib import Path
-from world_handicap_calculator.utils.scrape_scorecards import scrape_golfshot
+from old.scrape_scorecards import scrape_golfshot
 import seaborn as sns
 import pandas as pd
 import numpy as np
