@@ -131,6 +131,9 @@ def create_scores_table(database):
             CREATE TABLE scores(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 courseId VARCHAR(20),
+                city VARCHAR(100),
+                course_name VARCHAR(100),
+                facility_name VARCHAR(100),
                 roundId VARCHAR(20),
                 playerId VARCHAR(20),
                 player_name VARCHAR(100),
@@ -183,6 +186,12 @@ def create_scores_table(database):
                     cell_data['holes'] = data['model']['header']['holes'][hole]
                     cell_data['strokes'] = data['model']['game']['teams'][team] \
                                     ['players'][player]['scores'][hole]['score']
+                    cell_data['city'] = data['model']['detail']['city']
+                    cell_data['course_name'] = data['model']['detail'] \
+                                                ['courseName']
+                    cell_data['facility_name'] = data['model']['detail'] \
+                                                ['facilityName'].split('-')[0]
+                    cell_data['scoring_type'] = data['model']['detail']['scoringType']
 
                     round_data.append(cell_data)
 
@@ -191,8 +200,12 @@ def create_scores_table(database):
                       INSERT INTO scores(
                           courseId,
                           roundId,
+                          city,
+                          course_name,
+                          facility_name,
                           playerId,
                           player_name,
+                          scoring_type,
                           course_hcp,
                           holes,
                           strokes,
@@ -202,8 +215,12 @@ def create_scores_table(database):
                     VALUES(
                         :courseId,
                         :roundId,
+                        :city,
+                        :course_name,
+                        :facility_name,
                         :playerId,
                         :player_name,
+                        :scoring_type,
                         :course_hcp,
                         :holes,
                         :strokes,
