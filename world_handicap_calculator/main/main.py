@@ -44,6 +44,10 @@ def calculate_index() -> pd.DataFrame:
     rounds_data['Idx'] = rounds_data['Diff']. \
             rolling(window=20, min_periods=1).apply(index_from_diff)
 
+    # my preference: sort by date in descending order
+    rounds_data.sort_values(by='start_date', ascending=False, inplace=True)
+    rounds_data.to_csv(Path(LOCAL_DATA_PATH).joinpath('rounds_data.csv'), index=True)
+
     return rounds_data
 
 
