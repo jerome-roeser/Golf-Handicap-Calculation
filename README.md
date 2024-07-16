@@ -11,7 +11,7 @@ The package aims at calculating a golf player index according to the world handi
 # Instructions (if direnv & .env are setup)
 Once the repository is cloned locally and the package is installed (with `make reinstall_package`)
 
-`cd` in the root directory of the repository and run the following `make` commands in your terminal
+`cd` in the root directory of the repository and run the following `make` commands in your terminal (after editing the `.env` file)
 
 ``` shell
 # scrape your golfshot account
