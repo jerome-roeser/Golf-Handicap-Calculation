@@ -14,7 +14,7 @@ Once the repository is cloned locally and the package is installed (with `make r
 `cd` in the root directory of the repository and run the following `make` commands in your terminal
 
 ``` shell
-# scrape your golfsshot account
+# scrape your golfshot account
 make scrape_golfshot
 
 # create a sqlite database
