@@ -1,14 +1,14 @@
-# whs-calculation
-calculate a golf player index according to the world handicap system from recorded golfshot scorecards
+# The whs-calculation package
+The package aims at calculating a golf player index according to the world handicap system from scorecards recorded with the [popular golfshot](https://golfshot.com/) app.
 
-# how it will work
-1. The package will scrape your golshot account
+# How it works
+1. The package will scrape the scorecards saved with your golshot account
 2. An sqlite database will be created with all the holes you played
-3. A table summarizing your rounds and calculating your playing handicap (Index) based on your last 20 rounds will be generated
+3. A table summarizing your rounds and calculating your playing handicap (Index) based on your last 20 rounds will be generated (printed in the terminal)
 
 
 
-# instructions (if direnv & .env are setup)
+# Instructions (if direnv & .env are setup)
 Once the repository is cloned locally and the package is installed (with `make reinstall_package`)
 
 `cd` in the root directory of the repository and run the following `make` commands in your terminal
@@ -25,7 +25,7 @@ make run_main
 ```
 --------------------------
 
-# Setup direnv & .env
+# -- Setup direnv & .env --
 In order to be able to configure the behavior of the package 📦 depending on the values of the variables defined in a .env project configuration file.
 
 **💻 First install the direnv shell extension.**
