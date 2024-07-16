@@ -40,9 +40,9 @@ def download_course(session, course_id):
   scorecard = session.get(p.results['source']).json()[
       'scorecard']  # remove unused siblings
 
-  if not Path('data/courses').exists():
-      Path('data/courses').mkdir(parents=True)
-  with open(f'data/courses/{course_id}.json', 'w') as f:
+  if not COURSES_DIRECTORY.exists():
+      Path(COURSES_DIRECTORY).mkdir(parents=True)
+  with open(COURSES_DIRECTORY.joinpath(f'{course_id}.json'), 'w') as f:
     ret = {'courseId': course_id,
            'courseUuid': course_uuid,
            'scorecard': scorecard}
@@ -57,11 +57,12 @@ def download_round(session, profile_id, round_id):
   p.feed(res.text)
   dfs. append(pd.read_html(res.content, index_col=0))
 
-  if not Path('data/rounds').exists():
-      Path('data/rounds').mkdir(parents=True)
+  if not ROUNDS_DIRECTORY.exists():
+      Path(ROUNDS_DIRECTORY).mkdir(parents=True)
   round_id = p.results['roundGroupId']
   round_date = p.results['model']['detail']['startTime'].split('T')[0]
-  with open(f"data/rounds/{round_date}_{round_id}.json", 'w') as f:
+  with open(ROUNDS_DIRECTORY.joinpath(f"{round_date}_{round_id}.json"), 'w') as f:
+#   with open(f"data/rounds/{round_date}_{round_id}.json", 'w') as f:
     json.dump(p.results, f)
 
   download_course(session, p.results['model']['detail']['golfCourseWebId'])

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from world_handicap_calculator.params import *
-from world_handicap_calculator.oop.index_table import Rounds
+from world_handicap_calculator.oop.differential_scores import Rounds
 
 
 def index_from_diff(entries):
@@ -37,6 +37,10 @@ def index_from_diff(entries):
 def calculate_index() -> pd.DataFrame:
     rounds_data = Rounds().get_rounds_data()
 
+    # eliminate unfinished rounds
+    rounds_data.query("holes_played == 18 or holes_played == 9", inplace=True)
+
+    # calculate index based on last 20 differential scores
     rounds_data['Idx'] = rounds_data['Diff']. \
             rolling(window=20, min_periods=1).apply(index_from_diff)
 

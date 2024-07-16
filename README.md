@@ -9,14 +9,14 @@ A table summarizing your rounds and calculating your playing handicap (Index) ba
 
 
 # instructions (if direnv & .env are setup)
-Once the repository is cloned locally and the package is installed
+Once the repository is cloned locally and the package is installed (with `make reinstall_package`)
 
 ``` shell
 # scrape your golfsshot account
 make scrape_golfshot
 
 # create a sqlite database
-make database
+make sql_database
 
 # print your index table
 make run-main
