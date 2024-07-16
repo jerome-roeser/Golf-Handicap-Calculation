@@ -10,8 +10,8 @@ USER_ID = os.environ.get('USER_ID')
 USER_UNTIL = os.environ.get('USER_UNTIL')
 
 
-##################  CONSTANTS  #####################
-repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+##################  PATHS  #####################
+repo_path = Path(__file__).parent.parent
 
 LOCAL_DATA_PATH = Path(repo_path).joinpath("data")
 
