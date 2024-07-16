@@ -43,45 +43,52 @@ class Rounds():
         mask_columns = ['roundId', 'hole', 'hcp', 'slope', 'rating', 'par', 'course_hcp',
                         'strokes']
         df = self.data[mask_columns].copy()
-
-        # calculate initial SBA
-        df['CR'] = np.apply_along_axis(lambda row: \
-            row[0] // 18 + 1 if row[1] <= row[0] // 18 else row[0] // 18, \
-                axis= 1, \
-                arr= df[['course_hcp', 'hcp']].values)
-        df['net_double_bogey'] = df['par'] + df['CR'] + 2
-        df['SBA'] = np.where(df['strokes'] < df['net_double_bogey'], \
-                            df['strokes'], \
-                            df['net_double_bogey'])
-
-        # fix issue with rating of 9 holes courses
-        df['rating'] = df['rating'].apply(lambda x: x * 2 if x < 60 else x)
-
-        # if 9 holes played then an additional stroke should be added to the SBA
         group = df.groupby('roundId')
-        df_sum = group.sum()
 
-        df_sum['holes_played'] = df.groupby(['roundId', 'hole']).count() \
-                                    .groupby('roundId').sum()['strokes']
-        df_sum['additional_stroke'] = \
-            df_sum['holes_played'].map(lambda x: 1 if x == 9 else 0)
+        df_diff = group.agg({
+            'hole':'first',
+            'slope': 'first',
+            'rating': 'first',
+            'course_hcp': 'first',
+            'par': 'sum',
+            'strokes': 'sum',
+                })
+        df_diff['holes_played'] = group.count()['strokes']
+        df_diff['CR'] = \
+            np.apply_along_axis(\
+                lambda row: np.ceil(row[0] * (row[1] / 18)), \
+                    axis=1, \
+                    arr= df_diff[['course_hcp', 'holes_played']].values)
+        df_diff['net_double_bogey'] = df_diff['par'] + df_diff['CR'] + 2
+        df_diff['SBA_18_holes'] = \
+            np.where(df_diff['strokes'] < df_diff['net_double_bogey'], \
+                    df_diff['strokes'], \
+                    df_diff['net_double_bogey'])
+        df_diff['SBA'] = \
+            np.apply_along_axis(\
+                lambda row: row[0] + row[1] + row[2] + 1 if row[3] == 9 \
+                    else row[2], \
+                    axis=1, \
+                    arr= df_diff[['par', 'CR', 'SBA_18_holes', 'holes_played']]\
+                    .values)
 
-        df_sum['adjusted_SBA'] = df_sum['SBA'] + df_sum['additional_stroke']
-
-        # calculate gross differential score from adjsusted SBA, slope and rating
-        df_diff = pd.concat(
-            [df.groupby('roundId').first()[['slope', 'rating']],
-            df_sum[['holes_played','adjusted_SBA']]], axis=1)
+        # calculate differential score
         df_diff['Diff'] = \
-            np.apply_along_axis(lambda x: round((113/x[0]) * (x[2]-x[1]), 1), \
-                1, df_diff[['slope','rating','adjusted_SBA']].values)
-        df_diff.rename(columns={'adjusted_SBA': 'SBA'}, inplace=True)
+            np.apply_along_axis(\
+                lambda x: round((113/x[0]) * (x[2]-x[1]), 1), \
+                    axis= 1, \
+                    arr= df_diff[['slope','rating','SBA']].values)
 
+        # filter out incomplete rounds that can lead to menaningless differentials
+        df_diff.query("holes_played == 18 or holes_played == 9", inplace=True)
+
+        # return df, df_diff, group
         return df_diff[['holes_played', 'SBA', 'Diff']].reset_index()
 
     def get_rounds_data(self):
         rounds_data = self.get_round_details()\
             .merge(self.get_scoring_data(), on='roundId')\
             .merge(self.get_sba_and_diff(), on='roundId')
-        rounds_data = rounds_data.sort_values(by='start_date', ascending=True).reset_index(drop=True)
+        rounds_data = rounds_data.sort_values(by='start_date', ascending=True)\
+            .reset_index(drop=True)
         return rounds_data

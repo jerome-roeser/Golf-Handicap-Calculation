@@ -35,6 +35,7 @@ class Golfshot():
                         AND s.holes = h.hole
                 JOIN courses c
                     ON c.courseId = h.courseId
+                WHERE s.strokes IS NOT NULL
                 """
         c.execute(query)
         columns = [i[0] for i in c.description]
