@@ -13,8 +13,7 @@ USER_UNTIL = os.environ.get('USER_UNTIL')
 ##################  CONSTANTS  #####################
 repo_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-LOCAL_DATA_PATH = os.path.join(repo_path, "data")
-LOCAL_REGISTRY_PATH =  os.path.join(repo_path, ".lewagon", "mlops", "training_outputs")
+LOCAL_DATA_PATH = Path(repo_path).joinpath("data")
 
-COURSES_DIRECTORY = os.path.join(repo_path, "data", "courses")
-ROUNDS_DIRECTORY = os.path.join(repo_path, "data", "rounds")
+COURSES_DIRECTORY = Path(repo_path).joinpath("data", "courses")
+ROUNDS_DIRECTORY = Path(repo_path).joinpath("data", "rounds")
