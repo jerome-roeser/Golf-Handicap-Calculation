@@ -4,7 +4,7 @@ run_main:
 database:
 	python -m world_handicap_calculator.database.make_database
 
-scrape:
+scrape_golfshot:
 	python -m world_handicap_calculator.database.scrape_rounds
 
 streamlit:
