@@ -84,7 +84,6 @@ def download_rounds(session, profile_id, last_round=None):
     for row in round_table.tbody.findAll('tr'):
       round_id = row.attrs['data-href'].split('/')[-1]
       if round_id == last_round:
-        print(f"################## {round_id} is the culprit...")
         download_rounds = False
         break
       print(f'Downloading {round_id}...')

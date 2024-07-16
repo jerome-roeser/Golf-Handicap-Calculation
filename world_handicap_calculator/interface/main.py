@@ -44,4 +44,4 @@ def calculate_index() -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    calculate_index()
+    print(calculate_index())
