@@ -1,7 +1,7 @@
 run_main:
-	python -m world_handicap_calculator.interface.main
+	python -m world_handicap_calculator.main.main
 
-database:
+sql_database:
 	python -m world_handicap_calculator.database.make_database
 
 scrape_golfshot:
