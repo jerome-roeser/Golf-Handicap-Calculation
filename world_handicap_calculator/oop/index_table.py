@@ -71,17 +71,17 @@ class Rounds():
         # calculate gross differential score from adjsusted SBA, slope and rating
         df_diff = pd.concat(
             [df.groupby('roundId').first()[['slope', 'rating']],
-            df_sum['adjusted_SBA']], axis=1)
+            df_sum[['holes_played','adjusted_SBA']]], axis=1)
         df_diff['Diff'] = \
             np.apply_along_axis(lambda x: round((113/x[0]) * (x[2]-x[1]), 1), \
-                1, df_diff.values)
+                1, df_diff[['slope','rating','adjusted_SBA']].values)
         df_diff.rename(columns={'adjusted_SBA': 'SBA'}, inplace=True)
 
-        return df_diff[['SBA', 'Diff']].reset_index()
+        return df_diff[['holes_played', 'SBA', 'Diff']].reset_index()
 
     def get_rounds_data(self):
         rounds_data = self.get_round_details()\
             .merge(self.get_scoring_data(), on='roundId')\
             .merge(self.get_sba_and_diff(), on='roundId')
-        rounds_data.sort_values(by='start_date', ascending=False ,inplace=True)
+        rounds_data = rounds_data.sort_values(by='start_date', ascending=True).reset_index(drop=True)
         return rounds_data

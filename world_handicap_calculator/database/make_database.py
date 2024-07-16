@@ -138,8 +138,9 @@ def create_scores_table(database):
                 playerId VARCHAR(20),
                 player_name VARCHAR(100),
                 start_date DATETIME,
-                scoring_type VARCHAR(20),
                 pace_of_play FLOAT,
+                scoring_type VARCHAR(20),
+                teebox VARCHAR(20),
                 course_hcp FLOAT,
                 holes INTEGER,
                 strokes INTEGER,
@@ -181,6 +182,7 @@ def create_scores_table(database):
                                         hours=int(pace_of_play_formatted[0]), \
                                         minutes=int(pace_of_play_formatted[1])) \
                                         .total_seconds() // 60
+                    cell_data['teebox'] = data['model']['detail']['formattedTeeboxName']
                     cell_data['course_hcp'] = float(data['model']['detail'] \
                                             ['formattedCourseHandicap'])
                     cell_data['holes'] = data['model']['header']['holes'][hole]
@@ -206,6 +208,7 @@ def create_scores_table(database):
                           playerId,
                           player_name,
                           scoring_type,
+                          teebox,
                           course_hcp,
                           holes,
                           strokes,
@@ -221,6 +224,7 @@ def create_scores_table(database):
                         :playerId,
                         :player_name,
                         :scoring_type,
+                        :teebox,
                         :course_hcp,
                         :holes,
                         :strokes,

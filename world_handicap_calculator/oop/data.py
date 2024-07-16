@@ -18,7 +18,7 @@ class Golfshot():
                     s.course_name,
                     s.city,
                     s.scoring_type,
-                    h.teebox,
+                    s.teebox,
                     h.slope,
                     h.rating,
                     s.start_date,
@@ -31,6 +31,7 @@ class Golfshot():
                 FROM holes h
                 JOIN scores s
                     ON s.courseId = h.courseId
+                        AND s.teebox = h.teebox
                         AND s.holes = h.hole
                 JOIN courses c
                     ON c.courseId = h.courseId
