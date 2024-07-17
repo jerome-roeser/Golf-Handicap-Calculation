@@ -3,7 +3,10 @@ The package aims at calculating a golf player index according to the world handi
 
 # How it works
 1. The package will scrape the scorecards saved with your golshot account
-2. An sqlite database will be created with all the holes you played
+2. An sqlite database will be created with 3 related tables:
+  * courses: the courses played (Id, name)
+  * holes: holes details (hcp, distance, par, ...) for all the teeboxes of a course
+  * scores: the scoring and round detail (date, starting teebox, course hcp, strokes, ....) of all the holes played by a player
 3. A table summarizing your rounds and calculating your playing handicap (Index) based on your last 20 rounds will be generated (printed in the terminal)
 
 
