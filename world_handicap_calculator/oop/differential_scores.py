@@ -25,6 +25,16 @@ class Rounds():
         df = df[mask_columns].groupby('roundId').first()
         return df.reset_index()
 
+    def get_NbT(self):
+        group = self.data.groupby('roundId')
+        df = group.agg({'hole': 'first', 'strokes': 'count'}).reset_index()
+        df['tuple'] = list(zip(df['hole'], df['strokes']))
+        df['NbT'] = df['tuple'].map({
+            ('1',9): '9A',
+            ('10',9): '9B',
+            ('1',18): '18'})
+        return df[['roundId', 'NbT']]
+
     def get_scoring_data(self):
         """
         Returns a DataFrame with:
@@ -87,6 +97,7 @@ class Rounds():
 
     def get_rounds_data(self):
         rounds_data = self.get_round_details()\
+            .merge(self.get_NbT(), on='roundId')\
             .merge(self.get_scoring_data(), on='roundId')\
             .merge(self.get_sba_and_diff(), on='roundId')
         rounds_data = rounds_data.sort_values(by='start_date', ascending=True)\
