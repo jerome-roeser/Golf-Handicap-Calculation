@@ -1,3 +1,5 @@
+default: pytest
+
 run_main:
 	python -m world_handicap_calculator.main.main
 
@@ -13,3 +15,8 @@ streamlit:
 reinstall_package:
 	@pip uninstall -y world_handicap || :
 	@pip install -e .
+
+########## Testing ##########
+
+pytest:
+	PYTHONDONTWRITEBYTECODE=1 pytest -v --color=yes
