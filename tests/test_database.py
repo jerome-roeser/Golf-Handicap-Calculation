@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
 import unittest
-from world_handicap_calculator.params import *
 
+from world_handicap_calculator.params import *
 from world_handicap_calculator.main.main import calculate_index
 
 
