@@ -20,6 +20,6 @@ class TestDatabase(unittest.TestCase):
 
     def test_folder_structure(self):
         self.assertTrue(Path(repo_path).joinpath("src", "api").exists())
-        self.assertTrue(Path(repo_path).joinpath("src", "main").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "golf_handicap_calculation").exists())
         self.assertTrue(Path(repo_path).joinpath("src", "database").exists())
         self.assertTrue(Path(repo_path).joinpath("src", "oop").exists())
