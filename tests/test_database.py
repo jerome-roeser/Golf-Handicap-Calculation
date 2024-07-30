@@ -19,7 +19,7 @@ class TestDatabase(unittest.TestCase):
     #     self.assertTrue(Path(LOCAL_DATA_PATH).joinpath('golf.sqlite').exists())
 
     def test_folder_structure(self):
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "api").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "main").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "database").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "oop").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "api").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "main").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "database").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "oop").exists())
