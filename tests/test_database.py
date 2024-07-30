@@ -2,8 +2,8 @@ import pandas as pd
 from pathlib import Path
 import unittest
 
-from world_handicap_calculator.params import *
-from world_handicap_calculator.main.main import calculate_index
+from src.params import *
+from src.golf_handicap_calculation.main import calculate_index
 
 
 class TestDatabase(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestDatabase(unittest.TestCase):
     #     self.assertTrue(Path(LOCAL_DATA_PATH).joinpath('golf.sqlite').exists())
 
     def test_folder_structure(self):
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "api").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "main").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "database").exists())
-        self.assertTrue(Path(repo_path).joinpath("world_handicap_calculator", "oop").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "api").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "golf_handicap_calculation").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "database").exists())
+        self.assertTrue(Path(repo_path).joinpath("src", "oop").exists())

@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from html.parser import HTMLParser
 from lxml import etree
 from pathlib import Path
-from world_handicap_calculator.params import *
+from src.params import *
 
 
 class RoundParser(HTMLParser):
