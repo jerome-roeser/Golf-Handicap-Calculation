@@ -1,6 +1,6 @@
 import pandas as pd
 import sqlite3
-from world_handicap_calculator.params import *
+from src.params import *
 
 class Golfshot():
 

@@ -2,8 +2,8 @@ import pandas as pd
 from pathlib import Path
 import unittest
 
-from world_handicap_calculator.params import *
-from world_handicap_calculator.main.main import calculate_index
+from src.params import *
+from src.golf_handicap_calculation.main import calculate_index
 
 
 class TestDatabase(unittest.TestCase):

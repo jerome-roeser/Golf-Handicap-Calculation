@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from world_handicap_calculator.params import *
-from world_handicap_calculator.oop.differential_scores import Rounds
+from src.params import *
+from src.oop.differential_scores import Rounds
 
 
 def index_from_diff(entries):
