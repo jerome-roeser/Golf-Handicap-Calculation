@@ -1,19 +1,40 @@
 default: pytest
 
+
+clean: clean-build clean-pyc
+
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
+
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+# clean:
+# 	@rm -f */version.txt
+# 	@rm -f .coverage
+# 	@rm -f */.ipynb_checkpoints
+
 run_main:
-	python -m world_handicap_calculator.main.main
+	python -m src.golf_handicap_calculation.main
 
 sql_database:
-	python -m world_handicap_calculator.database.make_database
+	python -m src.database.make_database
 
 scrape_golfshot:
-	python -m world_handicap_calculator.database.scrape_rounds
+	python -m src.database.scrape_rounds
 
 streamlit:
 	@streamlit run ui/app.py
 
 reinstall_package:
-	@pip uninstall -y world_handicap || :
+	@pip uninstall -y world_handicap_stats || :
 	@pip install -e .
 
 ########## Testing ##########

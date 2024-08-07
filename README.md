@@ -20,7 +20,7 @@ Once the repository is cloned locally and the package is installed (with `make r
 # scrape your golfshot account
 make scrape_golfshot
 
-# create a sqlite database
+# create / refresh a sqlite database
 make sql_database
 
 # print your index table
