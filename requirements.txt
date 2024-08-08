@@ -1,8 +1,6 @@
+beautifulsoup4
+lxml
 numpy
 pandas
 pytest
-matplotlib
-seaborn
-beautifulsoup4==4.12.3
-bs4==0.0.2
-requests==2.32.3
+requests
