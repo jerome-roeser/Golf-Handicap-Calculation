@@ -34,7 +34,7 @@ streamlit:
 	@streamlit run ui/app.py
 
 reinstall_package:
-	@pip uninstall -y world_handicap_stats || :
+	@pip uninstall -y whs-calculator || :
 	@pip install -e .
 
 ########## Testing ##########
