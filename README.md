@@ -28,6 +28,10 @@ make run_main
 ```
 --------------------------
 
+
+<details>
+  <summary>Click me for direnv and .env Setup</summary>
+  
 # -- Setup direnv & .env --
 In order to be able to configure the behavior of the package 📦 depending on the values of the variables defined in a .env project configuration file.
 
@@ -79,3 +83,4 @@ Then
 # to reload your env variables 🚨🚨
 direnv reload .
 ```
+</details>
