@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from src.oop.data import Golfshot
+from golf_handicap_calculation.oop.data import Golfshot
 
 
 class Rounds():
