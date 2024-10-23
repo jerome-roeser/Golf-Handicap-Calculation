@@ -1,26 +1,20 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "whs-calculator"
-version = "0.0.1"
-authors = [
-    {name = "Jérôme Roeser", email = "jerome.roeser@gmail.com"},
-]
-description = """
-              A package to scrape golf scorecards, create a sqlite database
-              and compute a golf handicap index table
-              """
+[tool.poetry]
+name = "golf-handicap-calculation"
+version = "0.1.0"
+description = ""
+authors = ["jerome roeser <jerome.roeser@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.10"
-keywords = ["sqllite", "scraper"]
-license = {text = "MIT"}
-dynamic = ["dependencies"]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-namespaces = false
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
+numpy = "^2.1.2"
+pandas = "^2.2.3"
+lxml = "^5.3.0"
+pytest = "^8.3.3"
 
-[tool.setuptools.dynamic]
-dependencies = {file = "requirements.txt"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

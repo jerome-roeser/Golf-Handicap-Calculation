@@ -3,7 +3,7 @@ import json
 import sqlite3
 
 from pathlib import Path
-from src.params import *
+from golf_handicap_calculation.params import *
 
 
 def create_courses_table(database):

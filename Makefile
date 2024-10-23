@@ -1,6 +1,5 @@
 default: pytest
 
-
 clean: clean-build clean-pyc
 
 clean-build:
@@ -22,20 +21,19 @@ clean-pyc:
 # 	@rm -f */.ipynb_checkpoints
 
 run_main:
-	python -m src.golf_handicap_calculation.main
+	python -m golf_handicap_calculation.main
 
 sql_database:
-	python -m src.database.make_database
+	python -m golf_handicap_calculation.database.make_database
 
 scrape_golfshot:
-	python -m src.database.scrape_rounds
+	python -m golf_handicap_calculation.database.scrape_rounds
 
 streamlit:
 	@streamlit run ui/app.py
 
-reinstall_package:
-	@pip uninstall -y whs-calculator || :
-	@pip install -e .
+install:
+	poetry install
 
 ########## Testing ##########
 
