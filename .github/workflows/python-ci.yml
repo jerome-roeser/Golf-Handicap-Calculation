@@ -32,4 +32,4 @@ jobs:
 
     # Fourth step: run tests with Pytest
     - name: Run tests
-      run: make
+      run: poetry run make
