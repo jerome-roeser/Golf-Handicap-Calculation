@@ -1,5 +1,5 @@
 
-import argparse
+import click
 import json
 import pandas as pd
 import re
@@ -92,23 +92,17 @@ def download_rounds(session, profile_id, last_round=None):
 
     params['p'] += 1
 
-def get_args():
-    parser = argparse.ArgumentParser(description='Download GolfShot data')
-    parser.add_argument('username', nargs='?', help='Username for GolfShot account')
-    parser.add_argument('password', nargs='?', help='Password for GolfShot account')
-    parser.add_argument('profile_id', nargs='?', help='Profile ID for GolfShot account')
-    parser.add_argument(
-        '--until', help='Download rounds until specified round (by descending date)')
-    return parser.parse_args()
+@click.command()
+@click.option('--username', '-u', help='Username for GolfShot account')
+@click.option('--password_', '-p', help='Password for GolfShot account')
+@click.option('--profile_id', '-i', help='Profile ID for GolfShot account')
+@click.option('--until_', is_flag=True, help='Download rounds until specified round (by descending date)')
+def scrape_rounds(username, password_, profile_id, until_):
 
-
-def scrape_rounds():
-    args = get_args()
-
-    login = args.username if args.username else USER_NAME
-    password = args.password if args.password else PASSWORD
-    golfshot_id = args.profile_id if args.profile_id else USER_ID
-    until = args.until if args.until else USER_UNTIL
+    login = username if username else USER_NAME
+    password = password_ if password_ else PASSWORD
+    golfshot_id = profile_id if profile_id else USER_ID
+    until = until_ if until_ else USER_UNTIL
 
     with requests.Session() as session:
         tokenRequest = session.get(f'{GOLFSHOT_URL}/signin')
