@@ -1,5 +1,4 @@
 
-import argparse
 import click
 import json
 import pandas as pd
